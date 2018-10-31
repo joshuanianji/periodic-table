@@ -2,7 +2,7 @@
 
 This README is mainly for me to document what I've done so far in this ia so I can write about it later.
 
-## October 29
+## October 31
 
 This is my initial commit, which is pretty late tbh rip.
 So right now I'll document what I've done so far.
