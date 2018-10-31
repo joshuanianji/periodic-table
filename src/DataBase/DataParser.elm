@@ -4,7 +4,7 @@ module DataParser exposing (atomList, retrieveAtom)
 
 import Atom exposing (..)
 import AtomBox exposing (atomBox)
-import AtomJson exposing (atomData)
+import AtomJson
 import Debug
 import Json.Decode as Decode exposing (Decoder)
 import Json.Decode.Pipeline exposing (hardcoded, optional, required)
@@ -155,7 +155,7 @@ atomList : List Atom
 atomList =
     Decode.decodeString
         (Decode.list atomDecoder)
-        atomData
+        AtomJson.atomData
         |> removeResult
 
 
