@@ -8,6 +8,10 @@ This is my initial commit, which is pretty late tbh rip.
 So right now I'll document what I've done so far.
 So far I've made a couple of types, the `Atom` type and `Molecule`. , while the `Molecule` type is a recursive type to make nested plyatomics work.
 
+I've also parsed a JSON file containing the information for my periodic table, created my HTML periodic table (with the help of [Elm Ui](https://github.com/mdgriffith/elm-ui/tree/1.1.0)) and was able to correctly display my Molecule with subscripts and stuff in Html given the data tree.
+
+I've started to work on parsing molecules (get a text, for example "Ba(SO4)2" and output the data tree) but it'll take a while.
+
 ### `Atom` Type
 
 The `Atom` type is just a type alias.
