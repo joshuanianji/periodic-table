@@ -4,6 +4,12 @@ This README is mainly for me to document what I've done so far in this ia so I c
 
 ## October 31
 
+Holy crap my parser thing is starting to work I can parse retrieve the symbol of one atom from the string "MgBr2" (it outputs Mg) and I could easily do it from a while loop and Char.isUpper and stuff but I don't care cuz I'm so confused right now and I think this is the starting block to get things done.
+
+I dont really know what's happening right now I'm just following this talk called ["Demystifying Parsers"](https://youtu.be/M9ulswr1z0E) by Tereza Sokol and I'm kinda just copying and pasting her code and failing. Wow I do not understand parsing at all.
+
+## October 30
+
 This is my initial commit, which is pretty late tbh rip.
 So right now I'll document what I've done so far.
 So far I've made a couple of types, the `Atom` type and `Molecule`. , while the `Molecule` type is a recursive type to make nested plyatomics work.

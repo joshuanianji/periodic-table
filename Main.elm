@@ -17,6 +17,7 @@ import HardCodedMolecules exposing (..)
 import Html exposing (Html)
 import Molecule exposing (..)
 import MoleculeDisplay exposing (..)
+import MoleculeParser
 import PeriodicTable exposing (periodicTable)
 
 
@@ -43,5 +44,6 @@ main =
         ]
         [ periodicTable
         , moleculeDisplay caffeine
+        , MoleculeParser.parserTest
         ]
         |> htmlPage
