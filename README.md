@@ -2,13 +2,28 @@
 
 This README is mainly for me to document what I've done so far in this ia so I can write about it later.
 
-## October 31
+## November 5 - My Parser fails!
+
+My parser code for an Atom looks like this:
+
+```elm
+atom : Parser String
+atom =
+    succeed ()
+        |. chompIf isCapital
+        |. chompIf isLower
+        |> getChompedString
+```
+
+So I just returns the string of the first element symbol. It works for strings like "MgBr2" (it returns "Mg") but for single letter atoms like "CS2" it gets messed up rip. I thought `chompIf` wouldn't return errors but I guess it does. Welp.
+
+## October 31 - Parsing??
 
 Holy crap my parser thing is starting to work I can parse retrieve the symbol of one atom from the string "MgBr2" (it outputs Mg) and I could easily do it from a while loop and Char.isUpper and stuff but I don't care cuz I'm so confused right now and I think this is the starting block to get things done.
 
 I dont really know what's happening right now I'm just following this talk called ["Demystifying Parsers"](https://youtu.be/M9ulswr1z0E) by Tereza Sokol and I'm kinda just copying and pasting her code and failing. Wow I do not understand parsing at all.
 
-## October 30
+## October 30 - First Commit
 
 This is my initial commit, which is pretty late tbh rip.
 So right now I'll document what I've done so far.

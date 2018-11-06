@@ -31,7 +31,7 @@ stringParserTest test =
 
 testParserThing : Result (List DeadEnd) String
 testParserThing =
-    run testParser testParserMagnesiumBromide
+    run testParser testParserBromide
 
 
 
@@ -107,6 +107,10 @@ testParserMagnesiumBromide =
 
 testParserBromide =
     "Br2"
+
+
+testCarbonDisulfide =
+    "CS2"
 
 
 
