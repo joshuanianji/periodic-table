@@ -1,4 +1,4 @@
-module Atom exposing (Atom, Charge(..), Isotopes, Section(..), State(..))
+module Atom.Atom exposing (Atom, Charge(..), Isotopes, Section(..), State(..))
 
 -- list of the isotopes - atomic masses. Remember - atomic mass is just the protons and neutrons of one atom!
 

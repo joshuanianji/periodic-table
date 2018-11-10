@@ -1,14 +1,14 @@
-module AtomBox exposing (atomBox)
+module Atom.AtomBox exposing (atomBox)
 
 -- this module is to make a box in the periodic table
 
-import Atom exposing (..)
+import Atom.Atom exposing (..)
+import Atom.HardCodedData exposing (..)
 import Colours
 import Element exposing (Color, Element, alignLeft, centerX, centerY, column, fill, maximum, minimum, row, text, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
-import HardCodedData exposing (..)
 
 
 

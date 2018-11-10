@@ -1,9 +1,9 @@
 -- this module is just to define what a compound is. I call it a compound a molecule is too rigid of a definition. Maybe I should change this file name?
 
 
-module Molecule exposing (Compound(..))
+module Molecule.Molecule exposing (Compound(..))
 
-import Atom exposing (Atom)
+import Atom.Atom exposing (Atom)
 
 
 

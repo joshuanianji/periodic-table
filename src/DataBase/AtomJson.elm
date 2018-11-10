@@ -1,4 +1,4 @@
-module AtomJson exposing (atomData)
+module DataBase.AtomJson exposing (atomData)
 
 -- deprecated package - will change later. it doesn't have enough information
 

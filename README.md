@@ -2,6 +2,13 @@
 
 This README is mainly for me to document what I've done so far in this ia so I can write about it later.
 
+# Changelog:
+
+## November 7 - Colours.elm is in /src folder
+
+Moved [Colours.elm](src/Colours.elm) to /src folder (used to be in /src/Atom).
+Also changed [elm.json](elm.json) to not include all subdirectories in `source-directories`. Now in [Main.elm](Main.elm) I'll have to type in `import Molecule.MoleculeDisplay exposing (..)` instead of `import MoleculeDisplay exposing (..)`.
+
 ## November 5 - My Parser fails!
 
 My parser code for an Atom looks like this:
@@ -56,7 +63,7 @@ The `Isoptopes` type, `Section` type as well as the other types I've defined mys
 
 #### Other Modules inside the Atom Folder
 
-Inside the Atom Folder, I also have the [AtomBox.elm](src/Atom/AtomBox.elm) file to hold the `atomBox` function, that is a function that takes in an `Atom` and outputs an `Element msg` that's just the box that holds the element stuff in the periodic table. 
+Inside the Atom Folder, I also have the [AtomBox.elm](src/Atom/AtomBox.elm) file to hold the `atomBox` function, that is a function that takes in an `Atom` and outputs an `Element msg` that's just the box that holds the element stuff in the periodic table.
 
 The [Colours.elm](src/Atom/Colours.elm) is a module which I honestly think does not belong in the Atom folder. It is just a module which holds a bunch of my defined `Color` types (Color is a module defined by elm-ui). FOr example, `appBackgroundGray`, which is a `Color` that defines the background colour of my entire website/app, is defined as follows:
 
@@ -88,7 +95,7 @@ boron =
 
 ### `Molecule` Type
 
-The Molecule type is defined partially recursively to allow for polyatomics and nested molecules. 
+The Molecule type is defined partially recursively to allow for polyatomics and nested molecules.
 `Mono` is to define atomic structures with only one atom, such as S<sub>8</sub>, while Poly is used to define literally anything else, such as Ba(SO<sub>4</sub>)<sub>2</sub>.
 
 The first argument to the Mono and poly are the atoms, and the Integer after is to represent the amount.

@@ -1,8 +1,8 @@
-module ParserTest exposing (testAtom)
+module DataBase.ParserTest exposing (testAtom)
 
 -- this module is a test for a single element of the JSON file. I used hydrogen. It works! So this is kinda deprecated but its prolly good to look back to when writing my IA
 
-import Atom exposing (..)
+import Atom.Atom exposing (..)
 import Json.Decode as Decode exposing (Decoder, float, int, string)
 import Json.Decode.Pipeline exposing (hardcoded, optional, required)
 
@@ -57,12 +57,13 @@ errorAtom =
         "Error"
         "Err"
         Gas
-        Metal
+        TransitionMetal
         (Multiple [ 1, -1 ])
         1
         [ 1, 2, 3 ]
-        (Position 1 1)
-        69.6969
+        1
+        1
+        "69.6969"
 
 
 
@@ -80,8 +81,9 @@ atomDecoder =
         |> hardcoded (Multiple [ 1, -1 ])
         |> hardcoded 8
         |> hardcoded [ 1, 2, 3 ]
-        |> hardcoded (Position 1 1)
-        |> hardcoded 1.008
+        |> hardcoded 1
+        |> hardcoded 1
+        |> hardcoded "1.008"
 
 
 

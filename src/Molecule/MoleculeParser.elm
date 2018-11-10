@@ -1,9 +1,9 @@
-module MoleculeParser exposing (parserTest)
+module Molecule.MoleculeParser exposing (parserTest)
 
 import Char
-import DataParser
+import DataBase.DataParser as DataParser
 import Element exposing (Element)
-import Molecule exposing (Compound)
+import Molecule.Molecule exposing (Compound)
 import Parser exposing (..)
 
 

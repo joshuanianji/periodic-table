@@ -3,9 +3,9 @@
 -}
 
 
-module HardCodedData exposing (fakeData)
+module Atom.HardCodedData exposing (fakeData)
 
-import Atom exposing (..)
+import Atom.Atom exposing (..)
 
 
 fakeData =

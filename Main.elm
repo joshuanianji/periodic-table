@@ -8,16 +8,16 @@ module Main exposing (main)
     import PeriodicTable exposing (upperPeriodicTable)
 -}
 
-import AtomBox exposing (atomBox)
+import Atom.AtomBox exposing (atomBox)
 import Colours
-import DataParser exposing (atomList)
+import DataBase.DataParser exposing (atomList)
 import Element exposing (Element)
 import Element.Background as Background
-import HardCodedMolecules exposing (..)
 import Html exposing (Html)
-import Molecule exposing (..)
-import MoleculeDisplay exposing (..)
-import MoleculeParser
+import Molecule.HardCodedMolecules exposing (..)
+import Molecule.Molecule exposing (..)
+import Molecule.MoleculeDisplay exposing (..)
+import Molecule.MoleculeParser as MoleculeParser
 import PeriodicTable exposing (periodicTable)
 
 

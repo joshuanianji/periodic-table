@@ -1,8 +1,8 @@
 module PeriodicTable exposing (periodicTable)
 
-import Atom exposing (..)
-import AtomBox exposing (..)
-import DataParser exposing (atomList)
+import Atom.Atom exposing (..)
+import Atom.AtomBox exposing (..)
+import DataBase.DataParser exposing (atomList)
 import Debug exposing (..)
 import Element exposing (Element, alignBottom, column, el)
 import List exposing (filter, map, range)

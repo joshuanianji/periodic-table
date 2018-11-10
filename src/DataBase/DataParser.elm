@@ -1,10 +1,10 @@
-module DataParser exposing (atomList, retrieveAtom)
+module DataBase.DataParser exposing (atomList, retrieveAtom)
 
 -- this module is used to parse the data.json into a list of atoms
 
-import Atom exposing (..)
-import AtomBox exposing (atomBox)
-import AtomJson
+import Atom.Atom exposing (..)
+import Atom.AtomBox exposing (atomBox)
+import DataBase.AtomJson as AtomJson
 import Debug
 import Json.Decode as Decode exposing (Decoder)
 import Json.Decode.Pipeline exposing (hardcoded, optional, required)

@@ -1,4 +1,4 @@
-module MoleculeDisplay exposing (moleculeDisplay)
+module Molecule.MoleculeDisplay exposing (moleculeDisplay)
 
 {-|
 
@@ -6,13 +6,13 @@ module MoleculeDisplay exposing (moleculeDisplay)
 
 -}
 
-import Atom exposing (Atom)
+import Atom.Atom exposing (Atom)
 import Colours
 import Element exposing (Element)
 import Element.Font as Font
 import Html exposing (Html)
 import List exposing (map)
-import Molecule exposing (..)
+import Molecule.Molecule exposing (..)
 import String exposing (toInt)
 
 

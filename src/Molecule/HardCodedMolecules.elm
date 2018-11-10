@@ -1,10 +1,10 @@
-module HardCodedMolecules exposing (bariumSulfate, caffeine, sulfur)
+module Molecule.HardCodedMolecules exposing (bariumSulfate, caffeine, sulfur)
 
 {-| This module is just a bunch of molecules that are hard coded lmao feels bad
 -}
 
-import DataParser exposing (retrieveAtom)
-import Molecule exposing (..)
+import DataBase.DataParser exposing (retrieveAtom)
+import Molecule.Molecule exposing (..)
 
 
 {-| creating molecules are pretty easy, but searching for the atom is wack. So that's why we have the retrieveAtom function. Also this naming scheme is really bad I should change it. Nahhh whatever
