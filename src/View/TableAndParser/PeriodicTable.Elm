@@ -1,4 +1,11 @@
-module PeriodicTable exposing (periodicTable)
+{-
+   this is the Periodic Table module that makes all the tables and such
+   periodicTable is the actual Element msg that exports the entire periodic table (including lactanides and actinides)
+
+-}
+
+
+module TableAndParser.PeriodicTable exposing (periodicTable)
 
 import Atom.Atom exposing (..)
 import Atom.AtomBox exposing (..)
@@ -9,8 +16,6 @@ import List exposing (filter, map, range)
 
 
 
--- The Periodic Table module that makes all the tables and such
--- Main periodic table - without lactinides and actinides
 -- this is a higher level function to make the group. takes in a list of atoms and outputs the column of elements.
 
 

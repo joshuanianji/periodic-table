@@ -1,6 +1,7 @@
 module DataBase.AtomJson exposing (atomData)
 
--- deprecated package - will change later. it doesn't have enough information
+-- This is a copy and paste from a json file, and I parse ir in DataParser.elm
+
 
 
 atomData =

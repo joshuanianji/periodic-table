@@ -1,49 +1,36 @@
 module Main exposing (main)
 
--- Atom holds all the modulated html stuff, database holds all the information about the atoms
-{-
-   This module is is I want to flex off my periodic table
+import Browser
+import Html exposing (Html)
+import Model exposing (Directory(..), Model)
+import Msg exposing (Msg(..))
+import Update exposing (update)
+import View exposing (view)
 
-    import HardCodedData exposing (..)
-    import PeriodicTable exposing (upperPeriodicTable)
+
+
+{- INIT
+   initializing the model. I make the default page the home page and make Model.stringContent the `InputStringContent Nothing` type
+
 -}
 
-import Atom.AtomBox exposing (atomBox)
-import Colours
-import DataBase.DataParser exposing (atomList)
-import Element exposing (Element)
-import Element.Background as Background
-import Html exposing (Html)
-import Molecule.HardCodedMolecules exposing (..)
-import Molecule.Molecule exposing (..)
-import Molecule.MoleculeDisplay exposing (..)
-import Molecule.MoleculeParser as MoleculeParser
-import PeriodicTable exposing (periodicTable)
+
+initModel : Model
+initModel =
+    { directory = TableAndParserView
+    }
 
 
-
--- htmlPage changes the element msg to Html msg and makes a dark theme
--- element.layout is basically the HTML or BODY tag so I made the entire html have a dark background
--- I also made the HTML or BODY, I don't really care honestly, have a padding of 10px
-
-
-htmlPage : Element msg -> Html msg
-htmlPage pageElements =
-    Element.layout
-        [ Background.color Colours.appBackgroundGray
-        , Element.padding 10
-        ]
-        pageElements
+init : () -> ( Model, Cmd Msg )
+init () =
+    ( initModel, Cmd.none )
 
 
-main : Html msg
+main : Program () Model Msg
 main =
-    Element.column
-        [ Element.spacing 40
-        , Element.centerX
-        ]
-        [ periodicTable
-        , moleculeDisplay caffeine
-        , MoleculeParser.parserTest
-        ]
-        |> htmlPage
+    Browser.element
+        { init = init
+        , view = view
+        , update = update
+        , subscriptions = always Sub.none
+        }

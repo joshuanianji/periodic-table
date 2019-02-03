@@ -4,6 +4,13 @@ This README is mainly for me to document what I've done so far in this ia so I c
 
 # Changelog:
 
+
+## February 2 - Rearranging of the files
+
+I need to start thinking of expanding my app. Right now I only have a main function that is an `Html Msg` type, and if I want to render clicks and other stuff, as well as handle multiple pages, I'll need to use a full on model - view - update architecture. I also made a View folder where I put my [TableParserView.elm](View/TableAndParser/TableParserView.elm) where it holds the view for the periodic table and the molecule parser, but not the logic behind it. I also made a bunch of new files for the model-view-update architecture, but visually I haven't changed anything yet.
+
+I also added a bunch of comments on the [Model](Model.elm), [Update](Update.elm), [Msg](Msg.elm) and [View](View.elm) files so wow I'm such a good programmer ree.
+
 ## November 7 - Colours.elm is in /src folder
 
 Moved [Colours.elm](src/Colours.elm) to /src folder (used to be in /src/Atom).
