@@ -18,6 +18,7 @@ import View exposing (view)
 initModel : Model
 initModel =
     { directory = TableAndParserView
+    , selectedAtom = Nothing
     }
 
 

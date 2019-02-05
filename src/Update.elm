@@ -6,10 +6,15 @@
 
 module Update exposing (update)
 
-import Model exposing (Model)
+import Model exposing (Directory(..), Model)
 import Msg exposing (Msg(..))
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( model, Cmd.none )
+    case msg of
+        ZoomAtom atom ->
+            ( { model | selectedAtom = Just atom, directory = ZoomAtomView }, Cmd.none )
+
+        UnZoomAtom ->
+            ( { model | selectedAtom = Nothing, directory = TableAndParserView }, Cmd.none )

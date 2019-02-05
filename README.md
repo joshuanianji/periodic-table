@@ -5,11 +5,136 @@ This README is mainly for me to document what I've done so far in this ia so I c
 # Changelog:
 
 
+## February 5 - ZoomAtom
+
+Clicking the atom to reveal a more detailed page of the atom was a design from the start, but I wanted them to stay on the same page, and maybe just overlay the more detailed `Element Msg` **on top** of the periodic table. I decided not to do that, and instead directed the user to another page, or another view function entirely. 
+
+To do this, I made each `atomBox` have a onClick function that passed the `ZoomAtom` function from our [Msg](Msg.elm) module. This ZoomAtom function carries with it an Atom, so it can bring what atom was clicked into the update function.
+
+```elm
+-- (Msg.elm)            ZoomAtom is a Msg type that carries an Atom with it 
+type Msg
+    = ZoomAtom Atom
+    | ...
+
+
+-- (Atom/AtomBox.elm)   inside the atomBox function, I remember to include the Atom with the ZoomAtom. 
+atomBox : Atom -> Element Msg
+atomBox atom =
+    column
+        [ ...
+        , onClick (ZoomAtom atom)
+        ]
+        [...]
+
+-- (Update.elm)         the update function uses the atom the ZoomAtom carries.
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    case msg of
+        ZoomAtom atom ->
+            ( { model | selectedAtom = Just atom, directory = ZoomAtomView }, Cmd.none )
+        ...
+```
+I also changed the model and the Directory type in [Model.elm](Model.elm) so it can help the update function.
+```elm
+-- (Model.elm)
+type alias Model =
+    { directory : Directory
+    , selectedAtom : Maybe Atom
+    }
+
+type Directory
+    = TableAndParserView
+    | ZoomAtomView
+```
+When the update function receives the ZoomAtom message, it changes the `model.selectedAtom` to the atom the ZoomAtom carried (it uses the `Just` keyword because i made it a `Maybe Atom`). It also changes the Directory to the ZoomAtomView.
+
+Before, the Directory type was only the `TableAndParserView`, but now I added the ZoomAtomView. 
+I also only have `selectedAtom` and `directory` as records in my type alias in my model, so why not change it all up like this?
+```elm
+-- (new and improved Update.elm??)
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    case msg of
+        ZoomAtom atom ->
+            ( Model 
+                (Just atom) 
+                ZoomAtomView
+            , Cmd.none )
+```
+Well it won't scale lol.
+
+Anyways now that we can go *to* the zoom page, we need to actually display it. I just copy and pasted my atomBox function from [Atom/AtomBox.elm](src/Atom/AtomBox.elm) and made it 5x bigger to make my new and improved atomZoomBox!!! You can find it inside [AtomBoxZoom.elm](src/View/TableAndParser/AtomBoxZoom.elm), and I should prolly modulate it better, but the point is that i didn't do much for the zoom view. I need to add more details, but that goes later! I just want everything working for now!
+
+Since I'm making a completely different view for when the user zooms upon an atom, an atomZoomBox will not suffice. We need a full screen page with an 'x' to close the zoom view. This is a lot easier than you may anticipate.
+
+I made [AtomZoomView.elm](src/View/AtomZoomView.elm) that will hold our full screen page. It is, in its essence, an `Element.column` that holds the 'x' button on the upper right and our zoomBox in the middle (centered vertically and horizontally).
+```elm
+atomZoomView : Model -> Element Msg
+atomZoomView model =
+    column
+        [ width fill
+        , height fill
+        ]
+        [ closeButton
+        , atomZoomThingy model.selectedAtom
+        ]
+```
+I didn't use the actual atomZoomBox, because I had to use a wrapper. Our atomZoomBox as seen in [AtomBoxZoom.elm](src/View/TableAndParser/AtomBoxZoom.elm) has a type signature of `atomBoxZoom : Atom -> Element Msg`. This creates a problem, as our `model.selectedAtom`, as seen previously, has a type signature of `Maybe Atom`! Although `model.selectedAtom` will never be `Nothing` in this case, we must handle the exception because elm is a strong-typed language lol.
+My wrapper looks like this:
+```elm
+-- atomBoxZoom view wrapper: atomZoomThingy for a lack of better name. Has to take in a Maybe Atom because that's what the Model has. If there is no atom, just output the errorAtom
+
+
+atomZoomThingy : Maybe Atom -> Element Msg
+atomZoomThingy maybeAtom =
+    el
+        [ centerX, centerY ]
+    <|
+        case maybeAtom of
+            Just atom ->
+                atomBoxZoom atom
+
+            Nothing ->
+                -- this shouldn't happen!
+                atomBoxZoom errorAtom
+```
+Lol i had no idea what to call it so I just went with `atomZoomThingy` kekkkk. Anyways I also imported the errorAtom from [ParserTest.elm](src/DataBase/ParserTest.elm), you should go check it out its pretty sick lol. Tbh i should probably change that, i shouldn't import it from a **test** module lol.
+
+Anyways, our thing works! I used a unicode 'x' to make the exit button ("×"), but now we need to make the button work.
+
+I'm too lazy to actually code in the button, so I just made the exit "button" an `Element.el` with the `pointer : Attribute Msg` in its attributes so the mouse will be a pointer when it hovers over top of it. Probably a bad idea tbh.
+
+```elm
+-- close button.
+
+
+closeButton : Element Msg
+closeButton =
+    el
+        [ width shrink
+        , height shrink
+        , Font.size 40
+        , alignTop
+        , alignRight
+        , padding 20
+        , Font.color Colours.fontColour
+        , onClick UnZoomAtom
+        -- so the mouse will be a pointer! : ' )
+        , pointer
+        , Font.center
+        ]
+        (text "×")
+```
+Boom now we also have a close button and if you check out [Msg.elm](src/Msg.elm) you can see that `UnZoomAtom` basically does the opposite of `ZoomAtom`. It makes `model.selectedAtom = Nothing` and `model.directory = TableAndParserView`. And it works!
+
+To check out how the [view]((src/View.elm)) function handles it, it just looks at `model.directory` using case analysis and returns the appropriate view function.
+
 ## February 2 - Rearranging of the files
 
 I need to start thinking of expanding my app. Right now I only have a main function that is an `Html Msg` type, and if I want to render clicks and other stuff, as well as handle multiple pages, I'll need to use a full on model - view - update architecture. I also made a View folder where I put my [TableParserView.elm](View/TableAndParser/TableParserView.elm) where it holds the view for the periodic table and the molecule parser, but not the logic behind it. I also made a bunch of new files for the model-view-update architecture, but visually I haven't changed anything yet.
 
-I also added a bunch of comments on the [Model](Model.elm), [Update](Update.elm), [Msg](Msg.elm) and [View](View.elm) files so wow I'm such a good programmer ree.
+I also added a bunch of comments on the [Model](src/Model.elm), [Update](src/Update.elm), [Msg](src/Msg.elm) and [View](src/View.elm) files so wow I'm such a good programmer ree.
 
 ## November 7 - Colours.elm is in /src folder
 

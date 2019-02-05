@@ -1,8 +1,30 @@
-module Colours exposing (actinide, alkali, alkalineEarth, appBackgroundGray, atomBoxBackground, fontColour, gaseousState, halogen, hydrogen, lanthanide, liquidState, metalloid, nobleGas, nonMetal, postTransitionMetal, solidState, transitionMetal, unknown)
+module Colours exposing
+    ( actinide
+    , alkali
+    , alkalineEarth
+    , appBackgroundGray
+    , atomBoxBackground
+    , fontColour
+    , gaseousState
+    , halogen
+    , hydrogen
+    , lanthanide
+    , liquidState
+    , metalloid
+    , nobleGas
+    , nonMetal
+    , postTransitionMetal
+    , sectionColour
+    , solidState
+    , stateColour
+    , transitionMetal
+    , unknown
+    )
 
 -- this is responsible for the material design dark colours - basically just naming them lol.
 -- rgb takes in a value between 0 and 1 - not 1 and 255, so I use rgb255
 
+import Atom.Atom exposing (Section(..), State(..))
 import Element exposing (Color, rgb255, rgba)
 import Element.Background exposing (color)
 
@@ -173,3 +195,69 @@ lanthanide =
 actinide : Color
 actinide =
     rgb255 196 32 140
+
+
+
+-- HERE ARE THE FUCNTIONS USED TO COLOUR THE ATOM NAMES AND STUFF (STATES AND GROUPS)
+-- function used in atomSymbol function - returns the colour for the state at room temperature
+
+
+stateColour : State -> Color
+stateColour state =
+    case state of
+        Solid ->
+            solidState
+
+        Liquid ->
+            liquidState
+
+        Gas ->
+            gaseousState
+
+        UnknownState ->
+            unknown
+
+
+
+-- function used to get Section (e.g. Alkali, AlialineEarth, etc.) and return the corresponding colour associated with it
+-- TODO: lanthanide and actinide colours - maybe also make the s for the metals more different?
+
+
+sectionColour : Section -> Color
+sectionColour section =
+    case section of
+        Hydrogen ->
+            hydrogen
+
+        Alkali ->
+            alkali
+
+        AlkalineEarth ->
+            alkalineEarth
+
+        TransitionMetal ->
+            transitionMetal
+
+        PostTransitionMetal ->
+            postTransitionMetal
+
+        Metalloid ->
+            metalloid
+
+        NonMetal ->
+            nonMetal
+
+        Halogen ->
+            halogen
+
+        NobleGas ->
+            nobleGas
+
+        Lanthanide ->
+            lanthanide
+
+        Actinide ->
+            actinide
+
+        UnknownSection ->
+            unknown

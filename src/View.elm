@@ -10,13 +10,14 @@
 
 module View exposing (view)
 
+import AtomZoomView exposing (atomZoomView)
 import Colours
 import Element exposing (Element)
 import Element.Background as Background
 import Html exposing (Html)
 import Model exposing (Directory(..), Model)
 import Msg exposing (Msg)
-import TableAndParser.TableAndParserView exposing (tableAndParserView)
+import TableAndParserView exposing (tableAndParserView)
 
 
 
@@ -36,7 +37,10 @@ htmlPage pageElements =
 
 view : Model -> Html Msg
 view model =
-    case model.directory of
-        TableAndParserView ->
-            tableAndParserView
-                |> htmlPage
+    htmlPage <|
+        case model.directory of
+            TableAndParserView ->
+                tableAndParserView
+
+            ZoomAtomView ->
+                atomZoomView model

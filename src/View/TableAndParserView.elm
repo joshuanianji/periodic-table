@@ -1,4 +1,10 @@
-module TableAndParser.TableAndParserView exposing (tableAndParserView)
+{-
+   This module specifies how the Periodic table and the molecule parser will look like. It's just a colimn of the periodic table and the parser if you look into it lol.
+
+-}
+
+
+module TableAndParserView exposing (tableAndParserView)
 
 import Element exposing (Element)
 import Molecule.HardCodedMolecules as Molecules

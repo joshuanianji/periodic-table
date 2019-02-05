@@ -1,4 +1,4 @@
-module DataBase.ParserTest exposing (testAtom)
+module DataBase.ParserTest exposing (errorAtom, testAtom)
 
 -- this module is a test for a single element of the JSON file. I used hydrogen. It works! So this is kinda deprecated but its prolly good to look back to when writing my IA
 
