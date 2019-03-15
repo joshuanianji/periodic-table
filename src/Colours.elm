@@ -9,8 +9,10 @@ module Colours exposing
     , halogen
     , hydrogen
     , lanthanide
+    , linkColour
     , liquidState
     , metalloid
+    , navbarBackground
     , nobleGas
     , nonMetal
     , postTransitionMetal
@@ -25,7 +27,7 @@ module Colours exposing
 -- rgb takes in a value between 0 and 1 - not 1 and 255, so I use rgb255
 
 import Atom.Atom exposing (Section(..), State(..))
-import Element exposing (Color, rgb255, rgba)
+import Element exposing (Color, rgb, rgb255, rgba)
 import Element.Background exposing (color)
 
 
@@ -39,6 +41,15 @@ import Element.Background exposing (color)
 fontColour : Color
 fontColour =
     rgb255 255 255 255
+
+
+
+-- colour for links
+
+
+linkColour : Color
+linkColour =
+    rgb255 1 92 204
 
 
 
@@ -60,8 +71,16 @@ appBackgroundGray =
 
 
 
+-- background for navbar
+
+
+navbarBackground : Color
+navbarBackground =
+    rgb255 51 51 61
+
+
+
 -- Background colour of each element block
--- Also is completely transparent
 
 
 atomBoxBackground : Color
@@ -71,15 +90,18 @@ atomBoxBackground =
 
 
 -- COLOURS OF THE ELEMENT SYMBOLS FOR DIFFERENT STATES
--- solid is black
+-- solid is white
 
 
 solidState : Color
 solidState =
-    rgb255 0 0 0
+    -- rgb255 39 39 47
+    -- fontColour
+    rgb 0 0 0
 
 
 
+-- fontColour
 -- liquid is blue - same blue as the nonmetals actually wowow lol
 
 

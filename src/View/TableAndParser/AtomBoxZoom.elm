@@ -1,5 +1,5 @@
 {-
-   AtomBoxZoom specifies how the "zoomed" atom box should look like. This is the larger atom box which specifies more information when the user clicks on an atom box.
+   AtomBoxZoom specifies  the "zoomed" atom box should look like. This is the larger atom box on the left when the user clicks on an atom box.
 
    A lot of these elements are very similar to fucnitons found in AtomBox, but whatever lol.
 
@@ -11,7 +11,7 @@ module TableAndParser.AtomBoxZoom exposing (atomBoxZoom)
 
 import Atom.Atom exposing (..)
 import Colours
-import Element exposing (Element, centerX, column, text, width)
+import Element exposing (Attribute, Element, alignRight, alignTop, centerX, column, inFront, padding, text, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
@@ -67,24 +67,28 @@ atomWeight : Atom -> Element Msg
 atomWeight atom =
     Element.el
         [ centerX
-        , Font.size 45
+        , Font.size 30
         ]
         (text <| atom.weight)
 
 
-
-{-
-   Here are other Attribute Msg stuff i want to add
--}
--- border stuff - I only want the bottom border!!
-
-
-borderWidths =
-    { bottom = 2
-    , left = 0
-    , right = 0
-    , top = 0
-    }
+atomShells : Atom -> Element Msg
+atomShells atom =
+    Element.column
+        [ alignTop
+        , alignRight
+        , Font.size 20
+        , padding 10
+        ]
+        (List.map
+            (\x ->
+                x
+                    |> String.fromInt
+                    |> text
+                    |> Element.el []
+            )
+            atom.electronShells
+        )
 
 
 
@@ -100,9 +104,7 @@ atomBoxZoom atom =
         , Element.spacing 10
         , Element.padding 50
         , Background.color Colours.atomBoxBackground
-        , Font.color Colours.fontColour
-        , Border.widthEach borderWidths
-        , Border.color (Colours.sectionColour atom.section)
+        , inFront (atomShells atom)
         ]
         [ atomNum atom
         , atomSymbol atom

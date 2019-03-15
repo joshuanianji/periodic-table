@@ -2,7 +2,8 @@
     "type": "application",
     "source-directories": [
         "src",
-        "src/View"
+        "src/View",
+        "src/DataTypes"
     ],
     "elm-version": "0.19.0",
     "dependencies": {
@@ -13,6 +14,8 @@
             "elm/html": "1.0.0",
             "elm/json": "1.0.0",
             "elm/parser": "1.1.0",
+            "elm-community/maybe-extra": "5.0.0",
+            "elm-community/result-extra": "2.2.1",
             "mdgriffith/elm-ui": "1.1.0",
             "myrho/elm-round": "1.0.4"
         },

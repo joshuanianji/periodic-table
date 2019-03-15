@@ -1,9 +1,13 @@
 module Main exposing (main)
 
 import Browser
+import Browser.Dom exposing (Viewport)
 import Html exposing (Html)
-import Model exposing (Directory(..), Model)
+import Model exposing (Directory(..), Model, MoleculeData)
+import Molecule.MoleculeParser exposing (stringToMolecule)
 import Msg exposing (Msg(..))
+import Subscriptions exposing (subscriptions)
+import Task
 import Update exposing (update)
 import View exposing (view)
 
@@ -17,14 +21,24 @@ import View exposing (view)
 
 initModel : Model
 initModel =
-    { directory = TableAndParserView
+    { viewport = Nothing
+    , directory = TableAndParserView
     , selectedAtom = Nothing
+    , moleculeData = moleculeDataInit
+    }
+
+
+moleculeDataInit : MoleculeData
+moleculeDataInit =
+    { inputMoleculeString = "H"
+    , inputMolecule = stringToMolecule "H"
+    , selectedAtoms = []
     }
 
 
 init : () -> ( Model, Cmd Msg )
 init () =
-    ( initModel, Cmd.none )
+    ( initModel, Task.perform GetViewport Browser.Dom.getViewport )
 
 
 main : Program () Model Msg
@@ -33,5 +47,5 @@ main =
         { init = init
         , view = view
         , update = update
-        , subscriptions = always Sub.none
+        , subscriptions = subscriptions
         }

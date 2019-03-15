@@ -1,8 +1,9 @@
-module DataBase.ParserTest exposing (errorAtom, testAtom)
+module DataBase.ParserTest exposing (testAtom)
 
 -- this module is a test for a single element of the JSON file. I used hydrogen. It works! So this is kinda deprecated but its prolly good to look back to when writing my IA
 
 import Atom.Atom exposing (..)
+import DataBase.DataParser exposing (errorAtom)
 import Json.Decode as Decode exposing (Decoder, float, int, string)
 import Json.Decode.Pipeline exposing (hardcoded, optional, required)
 
@@ -48,26 +49,7 @@ testAtomData =
 
 
 -- takes in a json string and outputs the atom
--- the atom to show when an error happens
-
-
-errorAtom : Atom
-errorAtom =
-    Atom
-        "Error"
-        "Err"
-        Gas
-        TransitionMetal
-        (Multiple [ 1, -1 ])
-        1
-        [ 1, 2, 3 ]
-        1
-        1
-        "69.6969"
-
-
-
--- the actual decoder for an atom
+-- the test decoder for an atom
 
 
 atomDecoder : Decoder Atom
@@ -78,12 +60,20 @@ atomDecoder =
         -- `null` decodes to `Nothing`
         |> hardcoded Gas
         |> hardcoded Alkali
-        |> hardcoded (Multiple [ 1, -1 ])
         |> hardcoded 8
-        |> hardcoded [ 1, 2, 3 ]
         |> hardcoded 1
         |> hardcoded 1
         |> hardcoded "1.008"
+        |> hardcoded [ 6, 9 ]
+        |> hardcoded "https://en.wikipedia.org/wiki/PewDiePie_vs_T-Series"
+        |> hardcoded "hello"
+        |> hardcoded "Joshua Ji"
+        |> hardcoded "Penis Parker"
+        |> hardcoded
+            (PhaseChanges
+                (Just 1)
+                (Just 2)
+            )
 
 
 
@@ -118,7 +108,7 @@ testAtom =
 
 {-
 
-   reference for me to see the what a hydrogen looks like - taken from HardCodedData
+   reference for me to see the what a hydrogen looks like - taken from HardCodedData (this is old lol)
 
    hydrogen : HardCodedAtomAlias
    hydrogen =

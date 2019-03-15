@@ -5,14 +5,34 @@
 -}
 
 
-module Model exposing (Directory(..), Model)
+module Model exposing (Directory(..), Model, MoleculeData, ScreenSize)
 
 import Atom.Atom exposing (Atom)
+import Molecule.Molecule exposing (MaybeMolecule)
+
+
+type alias ScreenSize =
+    { height : Float
+    , width : Float
+    }
+
+
+
+-- molecule parser and whatnot
+
+
+type alias MoleculeData =
+    { inputMoleculeString : String
+    , inputMolecule : MaybeMolecule
+    , selectedAtoms : List Atom
+    }
 
 
 type alias Model =
-    { directory : Directory
+    { viewport : Maybe ScreenSize -- only because in the beginning we don't have the data on the viewport
+    , directory : Directory
     , selectedAtom : Maybe Atom
+    , moleculeData : MoleculeData
     }
 
 
@@ -22,9 +42,11 @@ type alias Model =
 
    TableAndParserView :: Periodic table and the Molecule parser.
    ZoomAtomView :: Close-up specifications of the atom
+   QuizzerView :: where the user is quizzed
 -}
 
 
 type Directory
     = TableAndParserView
     | ZoomAtomView
+    | QuizzerView

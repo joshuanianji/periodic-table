@@ -3,11 +3,10 @@ module DataBase.AtomJson exposing (atomData)
 -- This is a copy and paste from a json file, and I parse ir in DataParser.elm
 
 
-
 atomData =
     """
 [{
-    "name": "Hydrogen",
+    "name": "Hydrogen", 
     "appearance": "colorless gas",
     "atomic_mass": 1.008,
     "boil": 20.271,
@@ -1048,10 +1047,10 @@ atomData =
     "category": "transition metal",
     "color": null,
     "density": 8.65,
-    "discovered_by": "Karl Samuel Leberecht Hermann",
+    "discovered_by": "Friedrich Stromeyer, Karl Samuel Leberecht Hermann",
     "melt": 594.22,
     "molar_heat": 26.02,
-    "named_by": "Isotopes of cadmium",
+    "named_by": "Friedrich Stromeyer",
     "number": 48,
     "period": 5,
     "phase": "Solid",

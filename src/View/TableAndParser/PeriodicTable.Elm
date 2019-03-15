@@ -9,71 +9,92 @@ module TableAndParser.PeriodicTable exposing (periodicTable)
 
 import Atom.Atom exposing (..)
 import Atom.AtomBox exposing (..)
-import DataBase.DataParser exposing (atomList)
+import Colours
+import DataBase.DataParser exposing (pTableAtomList)
 import Debug exposing (..)
-import Element exposing (Element, alignBottom, column, el)
+import Element exposing (Color, Element, alignBottom, centerX, column, el, fill, height, none, paddingEach, px, row, spacing, text, width)
+import Element.Background as Background
 import List exposing (filter, map, range)
+import Model exposing (Model)
+import Msg exposing (..)
 
 
 
--- this is a higher level function to make the group. takes in a list of atoms and outputs the column of elements.
+-- this is a function to make the group. takes in a list of atoms and outputs the column of elements.
 
 
-tableGroup : List (Element msg) -> Element msg
+tableGroup : List (Element Msg) -> Element Msg
 tableGroup elementList =
     column
         [ alignBottom
-        , Element.spacing 10
+        , spacing 10
         ]
         elementList
 
 
 
--- filterAtomGroup filters the list of atoms (elementList) by their group
+-- filterAtomGroup filters the list of pTableAtoms (elementList) by their group
 
 
-filterAtomGroup : List Atom -> Int -> List Atom
-filterAtomGroup atomList atomGroup =
+filterAtomGroup : List PTableAtom -> Int -> List PTableAtom
+filterAtomGroup pTableAtomList atomGroup =
     filter
-        (\atom -> atom.xPos == atomGroup)
-        atomList
+        (\pTableAtom ->
+            case pTableAtom of
+                PTableAtom atom ->
+                    atom.xpos == atomGroup
 
-
-
--- fBlockElements keeps the f block elements (lanthanides and actinides)
-
-
-fBlockElements : List Atom -> List Atom
-fBlockElements atomList =
-    filter
-        (\atom ->
-            atom.section == Lanthanide || atom.section == Actinide
+                PTablePlaceholder placeholder ->
+                    placeholder.xpos == atomGroup
         )
-        atomList
+        pTableAtomList
 
 
 
--- withoutFBlockElements takes out the f block elements
+-- getfBlockElements keeps the f block elements (lanthanides and actinides)
 
 
-withoutFBlockElements : List Atom -> List Atom
-withoutFBlockElements atomList =
+getfBlockElements : List PTableAtom -> List PTableAtom
+getfBlockElements pTableAtomList =
     filter
-        (\atom ->
-            not (atom.section == Lanthanide || atom.section == Actinide)
+        (\pTableAtom ->
+            case pTableAtom of
+                PTableAtom atom ->
+                    atom.section == Lanthanide || atom.section == Actinide
+
+                _ ->
+                    False
         )
-        atomList
+        pTableAtomList
+
+
+
+-- withoutfBlockElements takes out the f block elements
+
+
+withoutfBlockElements : List PTableAtom -> List PTableAtom
+withoutfBlockElements pTableAtomList =
+    filter
+        (\pTableAtom ->
+            case pTableAtom of
+                PTableAtom atom ->
+                    not (atom.section == Lanthanide || atom.section == Actinide)
+
+                _ ->
+                    True
+        )
+        pTableAtomList
 
 
 
 -- boxAtoms takes in a list of atoms and returns a list of elements where they are all in the periodic table boxes
 
 
-boxAtoms : List Atom -> List (Element msg)
-boxAtoms atoms =
+boxAtoms : Model -> List PTableAtom -> List (Element Msg)
+boxAtoms model pTableAtoms =
     map
-        atomBox
-        atoms
+        (pTableBox model)
+        pTableAtoms
 
 
 
@@ -91,10 +112,10 @@ boxAtoms atoms =
 -}
 
 
-pTableGroup : List Atom -> Int -> Element msg
-pTableGroup atomList group =
-    filterAtomGroup atomList group
-        |> boxAtoms
+pTableGroup : Model -> List PTableAtom -> Int -> Element Msg
+pTableGroup model pTableAtomList group =
+    filterAtomGroup pTableAtomList group
+        |> boxAtoms model
         |> tableGroup
 
 
@@ -102,27 +123,27 @@ pTableGroup atomList group =
 -- These are the big periodic table bunches.
 
 
-upperPeriodicTableList : List (Element msg)
-upperPeriodicTableList =
+upperPeriodicTableList : Model -> List (Element Msg)
+upperPeriodicTableList model =
     map
-        (atomList
-            |> withoutFBlockElements
-            |> pTableGroup
+        (pTableAtomList
+            |> withoutfBlockElements
+            |> pTableGroup model
         )
         (range 1 18)
 
 
 
--- this is to make the code easier to read. the periodicTableList thing is just the actual list, this creates the actual periodic tabl thing into one Element msg
+-- this is to make the code easier to read. the periodicTableList thing is just the actual list, this creates the actual periodic table thing into one Element msg
 
 
-upperPeriodicTable : Element msg
-upperPeriodicTable =
-    Element.row
-        [ Element.spacing 10
-        , Element.centerX
+upperPeriodicTable : Model -> Element Msg
+upperPeriodicTable model =
+    row
+        [ spacing 2
+        , centerX
         ]
-        upperPeriodicTableList
+        (upperPeriodicTableList model)
 
 
 
@@ -130,34 +151,118 @@ upperPeriodicTable =
 -- range 3 - 17 because the lanthanides and actinides go from group 3 to 17, at least from the JSON data lol
 
 
-lowerPeriodicTableList : List (Element msg)
-lowerPeriodicTableList =
+lowerPeriodicTableList : Model -> List (Element Msg)
+lowerPeriodicTableList model =
     map
-        (atomList
-            |> fBlockElements
-            |> pTableGroup
+        (pTableAtomList
+            |> getfBlockElements
+            |> pTableGroup model
         )
         (range 3 17)
 
 
-lowerPeriodicTable : Element msg
-lowerPeriodicTable =
-    Element.row
-        [ Element.spacing 10
-        , Element.centerX
+lowerPeriodicTable : Model -> Element Msg
+lowerPeriodicTable model =
+    row
+        [ spacing 2
+        , centerX
         ]
-        lowerPeriodicTableList
+        (lowerPeriodicTableList model)
 
 
 
 -- the periodic table we export
 
 
-periodicTable =
-    Element.column
-        [ Element.spacing 20
-        , Element.centerX
+periodicTable : Model -> Element Msg
+periodicTable model =
+    column
+        [ centerX
+        , width fill
+        , spacing 10
+        , Background.color (Element.rgba 0 0 0 0)
         ]
-        [ upperPeriodicTable
-        , lowerPeriodicTable
+        [ upperPeriodicTable model
+        , lowerPeriodicTable model
+        ]
+
+
+legend : Model -> Element Msg
+legend model =
+    let
+        legendPadding =
+            paddingEach { top = 0, right = 0, left = 400, bottom = 0 }
+    in
+    row
+        [ width fill
+        , spacing 30
+        , legendPadding
+        , Element.inFront (periodicTable model)
+        ]
+        [ sectionLegend
+        , stateLegend
+        ]
+
+
+sectionLegend =
+    let
+        allSections =
+            [ Hydrogen
+            , Alkali
+            , AlkalineEarth
+            , TransitionMetal
+            , PostTransitionMetal
+            , Metalloid
+            , NonMetal
+            , Halogen
+            , NobleGas
+            , Lanthanide
+            , Actinide
+            , UnknownSection
+            ]
+    in
+    List.map
+        (\section ->
+            legendItem
+                (Colours.sectionColour section)
+                (" " ++ Debug.toString section)
+        )
+        allSections
+        |> column []
+
+
+stateLegend =
+    let
+        allStates =
+            [ Solid
+            , Liquid
+            , Gas
+            , UnknownState
+            ]
+    in
+    List.map
+        (\state ->
+            legendItem
+                (Colours.stateColour state)
+                (" " ++ Debug.toString state)
+        )
+        allStates
+        |> column []
+
+
+
+-- each legend item with a colour box and a text
+
+
+legendItem : Color -> String -> Element Msg
+legendItem color string =
+    row
+        []
+        [ Element.el
+            [ width (px 10)
+            , height (px 10)
+            , Background.color color
+            ]
+            none
+        , string |> text
         ]

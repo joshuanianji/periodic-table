@@ -8,8 +8,14 @@
 module Msg exposing (Msg(..))
 
 import Atom.Atom exposing (Atom)
+import Browser.Dom exposing (Viewport)
+import Model exposing (Directory(..))
 
 
 type Msg
-    = ZoomAtom Atom
+    = GetViewport Viewport
+    | BrowserResized Int Int
+    | ZoomAtom Atom
     | UnZoomAtom
+    | ChangeDirectory Directory
+    | UpdateMoleculeParser String

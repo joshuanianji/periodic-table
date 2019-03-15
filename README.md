@@ -185,8 +185,8 @@ type alias Atom =
     , charge : Charge
     , protons : Int
     , isotopes : Isotopes
-    , xPos : Int
-    , yPos : Int
+    , xpos : Int
+    , ypos : Int
     , weight : String -- So i can keep sig. digs. (for example if the weight is 16.000 elm will automatically write 16, but string will keep 16.000)
     }
 ```
@@ -233,9 +233,9 @@ The Molecule type is defined partially recursively to allow for polyatomics and 
 The first argument to the Mono and poly are the atoms, and the Integer after is to represent the amount.
 
 ```elm
-type Compound
+type Molecule
     = Mono (Maybe Atom) Int
-    | Poly (List Compound) Int
+    | Poly (List Molecule) Int
 ```
 
 To see this code in action, we first have to define how we actually get our Atoms. Pur `atomList` function in our [DataParser.elm](src/DataBase.DataParser.elm) file is only a list of the Atom type aliases, without any tags or anything, unlike dictionary - but maybe I'll make a dictionary as it also has a O(logn) time complexity for retrieving elements. Because of this, we have to search through the list linearly with my `retrieveAtom` fucntion (`String -> Maybe Atom`) that takes in the element name and outputs a maybe element. This is also defined in the [DataParser.elm](src/DataBase.DataParser.elm) file.
@@ -262,7 +262,7 @@ This is just a collection of molecules and polyatomic ions that I'll make a data
 
 ```elm
 type PolyAtomic
-    = PolyAtomic Compound Int
+    = PolyAtomic Molecule Int
 
 
 
@@ -284,13 +284,13 @@ I haven't implemented this though lol.
 
 #### MoleculeDisplay
 
-This is to display the Compound type tree into an html thing that can be like Ba(SO<sub>4</sub>)<sub>2</sub>, with all the subscripts and stuff.
+This is to display the Molecule type tree into an html thing that can be like Ba(SO<sub>4</sub>)<sub>2</sub>, with all the subscripts and stuff.
 
 So I initially wanted to use elm-ui but i couldn't find any elm-ui thing for the HTML subscript tag, so I just used the elm core library's `Html.sub : Html msg` to use subs, then converted it to the elm ui's `Element msg` type with the `Element.html` function defined in elm-ui. I converted it to `Element msg` because it'll be easier to style and stuff with my predefined style sets (basically non-existence except for the things in my [Colours.elm](src/Atom/Colours.elm) file)
 
-Ok so this is probably confusing. So basically elm-ui doesn't have `<sub>` as far as I know, so I used `Html.sub` which has a type of `Html msg`. This was how I built my `moleculeTextHtml` function, which has a type signature of `Compound -> Html msg`. I also used a lot of case statements to build that function because of the Maybe Atom and how I don't display the quantity of the atom if it's 1, so hopefully I can use the knowledge I gained from that monad video on computerphile and shorten my code form that lmao. But I still am pretty lost to what a monad is and how it works so whatever.
+Ok so this is probably confusing. So basically elm-ui doesn't have `<sub>` as far as I know, so I used `Html.sub` which has a type of `Html msg`. This was how I built my `moleculeTextHtml` function, which has a type signature of `Molecule -> Html msg`. I also used a lot of case statements to build that function because of the Maybe Atom and how I don't display the quantity of the atom if it's 1, so hopefully I can use the knowledge I gained from that monad video on computerphile and shorten my code form that lmao. But I still am pretty lost to what a monad is and how it works so whatever.
 
-This is bad because I use things with `Element msg` types to build my app. So I have to convert `Html msg` to `Element msg`, which is convenient from elm-ui's `Element.html` function. `moleculeText` is then just the converted `moleculeTextHtml`, which has a type signature of `Compound -> Element msg`
+This is bad because I use things with `Element msg` types to build my app. So I have to convert `Html msg` to `Element msg`, which is convenient from elm-ui's `Element.html` function. `moleculeText` is then just the converted `moleculeTextHtml`, which has a type signature of `Molecule -> Element msg`
 
 So that's all fine and dandy, but this is only the text, defined by html span tags. I want to make this nice! So I just made `moleculeDisplay` that wraps the `moleculeTextHtml` in an `Element.el` function, which is basically the equivalent of an html `<div>`, which allows me to style it accordingly. So yay that looks nice!
 

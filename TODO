@@ -1,8 +1,8 @@
 
 Todo:
     ☐ Make uniform widths for elements after writing all of them down
-    ☐ Make type Element msg boxes that are placeholders for the lanthanide and actinide series with xops and ypos.
 Archive:
+  ✔ Make type Element msg boxes that are placeholders for the lanthanide and actinide series with xops and ypos. @done(19-03-10 19:06) @project(Todo)
   ✔ make the molecule type able to handle maybe cases @done(18-10-23 17:56) @project(Todo)
   ✔ find out why importing atomList doesn't allow you to access atoms like barium and sulfur. @done(18-10-23 10:01) It's because i didn't name them! I just have a list of type aliases. Damn @project(Todo)
   ✔ make a function that takes in an atomic weight and outputs a string with correct amount of decimal places (16.000 -> 16 when you do it regularly) @done(18-10-23 09:59) @project(Todo)

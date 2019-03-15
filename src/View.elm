@@ -12,11 +12,12 @@ module View exposing (view)
 
 import AtomZoomView exposing (atomZoomView)
 import Colours
-import Element exposing (Element)
+import Element exposing (Element, FocusStyle)
 import Element.Background as Background
 import Html exposing (Html)
 import Model exposing (Directory(..), Model)
 import Msg exposing (Msg)
+import QuizzerView exposing (quizzerView)
 import TableAndParserView exposing (tableAndParserView)
 
 
@@ -28,7 +29,8 @@ import TableAndParserView exposing (tableAndParserView)
 
 htmlPage : Element Msg -> Html Msg
 htmlPage pageElements =
-    Element.layout
+    Element.layoutWith
+        { options = [ Element.focusStyle focusStyle ] }
         [ Background.color Colours.appBackgroundGray
         , Element.padding 10
         ]
@@ -40,7 +42,24 @@ view model =
     htmlPage <|
         case model.directory of
             TableAndParserView ->
-                tableAndParserView
+                tableAndParserView model
 
             ZoomAtomView ->
                 atomZoomView model
+
+            QuizzerView ->
+                quizzerView model
+
+
+
+-- this makes all the buttons not have that ugly blue border. uncomment this and change the view function so it'll not have the options = [ Element.focusStyle focusStyle ], and change layoutWith to layout. It'll be so much uglier lol.
+
+
+{--}
+focusStyle : FocusStyle
+focusStyle =
+    { borderColor = Nothing
+    , backgroundColor = Nothing
+    , shadow = Nothing
+    }
+--}
