@@ -80,7 +80,7 @@ navbarBackground =
 
 
 
--- Background colour of each element block
+-- Background colour of each element block - completely transparent
 
 
 atomBoxBackground : Color
