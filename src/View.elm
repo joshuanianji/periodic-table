@@ -1,6 +1,6 @@
 {-
    This is the view function that handles what the user sees.
-   In the actual `view` funtion, we only refer to our tableAndParserView, which is retrieved from View/TableAndParser/TableAndParserView.elm. Yeah, a bad name, so I'll probably change it later. But rn it is all we have because I only have 1 page at the moment.
+   In the actual `view` function, we only refer to our tableAndParserView, which is retrieved from View/TableAndParser/TableAndParserView.elm. Yeah, a bad name, so I'll probably change it later. But rn it is all we have because I only have 1 page at the moment.
 
    I also have an htmlPage function that makes the background the dark grey and gives everything a padding of 10, as well as changing the `Element Msg` to `Html Msg`.
 
@@ -47,11 +47,10 @@ view model =
             ZoomAtomView ->
                 atomZoomView model
 
-            QuizzerView ->
-                quizzerView model
 
 
-
+-- QuizzerView ->
+--     quizzerView model
 -- this makes all the buttons not have that ugly blue border. uncomment this and change the view function so it'll not have the options = [ Element.focusStyle focusStyle ], and change layoutWith to layout. It'll be so much uglier lol.
 
 

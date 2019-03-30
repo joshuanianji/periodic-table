@@ -26,8 +26,7 @@ tableAndParserView model =
         [ Element.spacing 30
         , Element.centerX
         ]
-        [ navbar model
-        , periodicTable model
+        [ periodicTable model
         , compoundInput model
         , displayedCompound model
         , displayedMolarMass model

@@ -349,7 +349,7 @@ atomParser =
         , succeed PolyAtom
             |. symbol "("
             |. spaces
-            |= lazy (\_ -> moleculeParser)
+            |= moleculeParser
             |. spaces
             -- parse the stuff inside recursively!
             |. symbol ")"
@@ -397,7 +397,7 @@ integer =
                         succeed n
 
                     Nothing ->
-                        problem "Expected integer lel"
+                        problem "No Integer"
             )
 
 
@@ -410,7 +410,7 @@ checkAtomName atomParserData =
     case atomParserData of
         SingleAtom name amount ->
             if String.length name > 2 then
-                problem ("All element symbols are less than 3 characters long. Change " ++ name ++ "!")
+                problem ("Unknown atom " ++ name)
 
             else
                 succeed atomParserData

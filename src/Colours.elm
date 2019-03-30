@@ -96,11 +96,11 @@ atomBoxBackground =
 solidState : Color
 solidState =
     -- rgb255 39 39 47
-    -- fontColour
     rgb 0 0 0
 
 
 
+-- fontColour
 -- fontColour
 -- liquid is blue - same blue as the nonmetals actually wowow lol
 

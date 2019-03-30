@@ -1,19 +1,12 @@
 {-
-
    i'm going to create my Navbar using a mapping over a list to save space.
-
    First we have a navbarMapList which holds all the data.
-
    Next we have the navbarFramework that gives out a navbar element when given the tuple that the navbarMapList is constructed out of.
-
    Navbar framework also has to take in the Model to account for the fact that navbarElementAttributes, the helper function that changes the bolding of the navbar when we're in specific directories, takes in a tuple
-
    mapping navbarFramework over navbarMapList gives us a list of Element Msg's that we can put in row. This list looks like this:
-
    [ el [ centerX, width fill, onClick (ChangeDirectory PeriodicTablePage) ] (text "Periodic Table")
    , el [ centerX, width fill, onClick (ChangeDirectory QuizzerView) ] (text "Quiz Yourself!")
    ]
-
 -}
 
 
@@ -38,7 +31,8 @@ import Msg exposing (Msg(..))
 navbarMapList : List ( String, Directory )
 navbarMapList =
     [ ( "Periodic Table", TableAndParserView )
-    , ( "Quiz Yourself!", QuizzerView )
+
+    -- , ( "Quiz Yourself!", QuizzerView )
     ]
 
 

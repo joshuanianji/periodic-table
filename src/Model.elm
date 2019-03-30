@@ -49,4 +49,7 @@ type alias Model =
 type Directory
     = TableAndParserView
     | ZoomAtomView
-    | QuizzerView
+
+
+
+-- | QuizzerView
