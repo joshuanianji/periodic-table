@@ -145,7 +145,7 @@ cleanErrorsToString deadends =
                     else
                         Nothing
 
-                -- starts off with a number of without a capital
+                -- starts off with a number or without a capital
                 ExpectingVariable ->
                     Just "Element symbols start off with an upper case letter!"
 
@@ -216,7 +216,7 @@ parserDataToCompound atomParserData amount =
 
         Just list ->
             if list == [] then
-                BadMolecule [ DeadEnd 1 1 (Problem "No input specified") ]
+                BadMolecule [ DeadEnd 1 1 (Problem "No recognized input specified") ]
 
             else
                 Poly
@@ -358,7 +358,6 @@ atomParser =
                 [ integer
                 , succeed 1
                 ]
-            |. spaces
 
         -- if we reach the end of the string
         , succeed ()
@@ -366,13 +365,13 @@ atomParser =
             |> getChompedString
             |> map Unknown
 
-        -- If all else fails lol
-        , problem "unknown parser thing lel"
+        -- If all else fails lol. I don't add anything because the other parsers will already have their own error statements.
+        , problem "unknown parser thing"
         ]
 
 
 
--- to have at least 1 space (used for a hydrate)
+-- to have at least 1 space (used for a hydrate - there's always one space before a hydrate)
 
 
 oneOrMoreSpaces : Parser ()

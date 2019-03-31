@@ -101,7 +101,7 @@ extraInfo atom =
             , el [ Font.light ] (text atom.discoveredBy)
             ]
         , paragraph []
-            [ el [ Font.bold ] (text "Named by : ")
+            [ el [ Font.bold ] (text "Named by: ")
             , el [ Font.light ] (text atom.namedBy)
             ]
         , phaseChanges atom

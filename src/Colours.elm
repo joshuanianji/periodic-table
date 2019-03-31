@@ -40,6 +40,7 @@ import Element.Background exposing (color)
 
 fontColour : Color
 fontColour =
+    -- rgb255 132 132 138
     rgb255 255 255 255
 
 
@@ -90,18 +91,15 @@ atomBoxBackground =
 
 
 -- COLOURS OF THE ELEMENT SYMBOLS FOR DIFFERENT STATES
--- solid is white
+-- solid is black
 
 
 solidState : Color
 solidState =
-    -- rgb255 39 39 47
-    rgb 0 0 0
+    rgb255 0 0 0
 
 
 
--- fontColour
--- fontColour
 -- liquid is blue - same blue as the nonmetals actually wowow lol
 
 

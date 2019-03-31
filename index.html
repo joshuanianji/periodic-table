@@ -2,8 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Periodic Table!</title>
-  <link rel="icon" href="src/img/ptable_icon.png">
+  <title>Main</title>
 </head>
 
 <body>
@@ -5462,15 +5461,12 @@ function author$project$Molecule$MoleculeParser$cyclic$atomParser() {
 							author$project$Molecule$MoleculeParser$cyclic$moleculeParser(),
 							elm$parser$Parser$spaces),
 						elm$parser$Parser$symbol(')'))),
-				A2(
-					elm$parser$Parser$ignorer,
-					elm$parser$Parser$oneOf(
-						_List_fromArray(
-							[
-								author$project$Molecule$MoleculeParser$integer,
-								elm$parser$Parser$succeed(1)
-							])),
-					elm$parser$Parser$spaces)),
+				elm$parser$Parser$oneOf(
+					_List_fromArray(
+						[
+							author$project$Molecule$MoleculeParser$integer,
+							elm$parser$Parser$succeed(1)
+						]))),
 				A2(
 				elm$parser$Parser$map,
 				author$project$Molecule$MoleculeParser$Unknown,
@@ -5479,7 +5475,7 @@ function author$project$Molecule$MoleculeParser$cyclic$atomParser() {
 						elm$parser$Parser$ignorer,
 						elm$parser$Parser$succeed(_Utils_Tuple0),
 						elm$parser$Parser$keyword('')))),
-				elm$parser$Parser$problem('unknown parser thing lel')
+				elm$parser$Parser$problem('unknown parser thing')
 			]));
 }
 function author$project$Molecule$MoleculeParser$cyclic$moleculeParser() {
@@ -6526,7 +6522,7 @@ var author$project$Molecule$MoleculeParser$parserDataToCompound = F2(
 						elm$parser$Parser$DeadEnd,
 						1,
 						1,
-						elm$parser$Parser$Problem('No input specified'))
+						elm$parser$Parser$Problem('No recognized input specified'))
 					])) : author$project$Molecule$Molecule$GoodMolecule(
 				A2(author$project$Molecule$Molecule$Poly, list, amount));
 		}
@@ -7317,11 +7313,7 @@ var mdgriffith$elm_ui$Element$rgb255 = F3(
 	});
 var author$project$Colours$gaseousState = A3(mdgriffith$elm_ui$Element$rgb255, 255, 104, 89);
 var author$project$Colours$liquidState = A3(mdgriffith$elm_ui$Element$rgb255, 21, 127, 196);
-var mdgriffith$elm_ui$Element$rgb = F3(
-	function (r, g, b) {
-		return A4(mdgriffith$elm_ui$Internal$Model$Rgba, r, g, b, 1);
-	});
-var author$project$Colours$solidState = A3(mdgriffith$elm_ui$Element$rgb, 0, 0, 0);
+var author$project$Colours$solidState = A3(mdgriffith$elm_ui$Element$rgb255, 0, 0, 0);
 var mdgriffith$elm_ui$Internal$Model$Height = function (a) {
 	return {$: 'Height', a: a};
 };
@@ -12695,7 +12687,7 @@ var author$project$AtomZoomView$extraInfo = function (atom) {
 						mdgriffith$elm_ui$Element$el,
 						_List_fromArray(
 							[mdgriffith$elm_ui$Element$Font$bold]),
-						mdgriffith$elm_ui$Element$text('Named by : ')),
+						mdgriffith$elm_ui$Element$text('Named by: ')),
 						A2(
 						mdgriffith$elm_ui$Element$el,
 						_List_fromArray(
@@ -13575,6 +13567,10 @@ var mdgriffith$elm_ui$Element$Input$autofill = A2(
 	elm$core$Basics$composeL,
 	mdgriffith$elm_ui$Internal$Model$Attr,
 	elm$html$Html$Attributes$attribute('autocomplete'));
+var mdgriffith$elm_ui$Element$rgb = F3(
+	function (r, g, b) {
+		return A4(mdgriffith$elm_ui$Internal$Model$Rgba, r, g, b, 1);
+	});
 var mdgriffith$elm_ui$Element$Input$charcoal = A3(mdgriffith$elm_ui$Element$rgb, 136 / 255, 138 / 255, 133 / 255);
 var mdgriffith$elm_ui$Element$Input$darkGrey = A3(mdgriffith$elm_ui$Element$rgb, 186 / 255, 189 / 255, 182 / 255);
 var mdgriffith$elm_ui$Element$paddingXY = F2(
