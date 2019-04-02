@@ -10,8 +10,8 @@
 
 module View exposing (view)
 
-import AtomZoomView exposing (atomZoomView)
 import Colours
+import DetailedElementView exposing (atomZoomView)
 import Element exposing (Element, FocusStyle)
 import Element.Background as Background
 import Html exposing (Html)

@@ -64,11 +64,11 @@ update msg model =
 ```
 Well it won't scale lol.
 
-Anyways now that we can go *to* the zoom page, we need to actually display it. I just copy and pasted my atomBox function from [Atom/AtomBox.elm](src/Atom/AtomBox.elm) and made it 5x bigger to make my new and improved atomZoomBox!!! You can find it inside [AtomBoxZoom.elm](src/View/TableAndParser/AtomBoxZoom.elm), and I should prolly modulate it better, but the point is that i didn't do much for the zoom view. I need to add more details, but that goes later! I just want everything working for now!
+Anyways now that we can go *to* the zoom page, we need to actually display it. I just copy and pasted my atomBox function from [Atom/AtomBox.elm](src/Atom/AtomBox.elm) and made it 5x bigger to make my new and improved atomZoomBox!!! You can find it inside [DetailedAtomBox.elm](src/View/TableAndParser/DetailedAtomBox.elm), and I should prolly modulate it better, but the point is that i didn't do much for the zoom view. I need to add more details, but that goes later! I just want everything working for now!
 
 Since I'm making a completely different view for when the user zooms upon an atom, an atomZoomBox will not suffice. We need a full screen page with an 'x' to close the zoom view. This is a lot easier than you may anticipate.
 
-I made [AtomZoomView.elm](src/View/AtomZoomView.elm) that will hold our full screen page. It is, in its essence, an `Element.column` that holds the 'x' button on the upper right and our zoomBox in the middle (centered vertically and horizontally).
+I made [DetailedElementView.elm](src/View/DetailedElementView.elm) that will hold our full screen page. It is, in its essence, an `Element.column` that holds the 'x' button on the upper right and our zoomBox in the middle (centered vertically and horizontally).
 ```elm
 atomZoomView : Model -> Element Msg
 atomZoomView model =
@@ -80,7 +80,7 @@ atomZoomView model =
         , atomZoomThingy model.selectedAtom
         ]
 ```
-I didn't use the actual atomZoomBox, because I had to use a wrapper. Our atomZoomBox as seen in [AtomBoxZoom.elm](src/View/TableAndParser/AtomBoxZoom.elm) has a type signature of `atomBoxZoom : Atom -> Element Msg`. This creates a problem, as our `model.selectedAtom`, as seen previously, has a type signature of `Maybe Atom`! Although `model.selectedAtom` will never be `Nothing` in this case, we must handle the exception because elm is a strong-typed language lol.
+I didn't use the actual atomZoomBox, because I had to use a wrapper. Our atomZoomBox as seen in [DetailedAtomBox.elm](src/View/TableAndParser/DetailedAtomBox.elm) has a type signature of `atomBoxZoom : Atom -> Element Msg`. This creates a problem, as our `model.selectedAtom`, as seen previously, has a type signature of `Maybe Atom`! Although `model.selectedAtom` will never be `Nothing` in this case, we must handle the exception because elm is a strong-typed language lol.
 My wrapper looks like this:
 ```elm
 -- atomBoxZoom view wrapper: atomZoomThingy for a lack of better name. Has to take in a Maybe Atom because that's what the Model has. If there is no atom, just output the errorAtom

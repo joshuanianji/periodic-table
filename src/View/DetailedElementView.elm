@@ -1,4 +1,4 @@
-module AtomZoomView exposing (atomZoomView)
+module DetailedElementView exposing (atomZoomView)
 
 {-
    When we click on an atom the entire page will change to display the atom zoom view and the close button.
@@ -14,7 +14,7 @@ import Element.Font as Font
 import Model exposing (Model)
 import Msg exposing (Msg(..))
 import Subscriptions exposing (..)
-import TableAndParser.AtomBoxZoom exposing (atomBoxZoom)
+import TableAndParser.DetailedAtomBox exposing (atomBoxZoom)
 
 
 

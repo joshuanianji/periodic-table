@@ -7,7 +7,7 @@
 -}
 
 
-module TableAndParser.AtomBoxZoom exposing (atomBoxZoom)
+module TableAndParser.DetailedAtomBox exposing (atomBoxZoom)
 
 import Atom.Atom exposing (..)
 import Colours
