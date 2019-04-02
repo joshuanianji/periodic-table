@@ -1,5 +1,5 @@
 {-
-   AtomBoxZoom specifies  the "zoomed" atom box should look like. This is the larger atom box on the left when the user clicks on an atom box.
+   DetailedAtomBox specifies  the "zoomed" atom box should look like. This is the larger atom box on the left when the user clicks on an atom box.
 
    A lot of these elements are very similar to fucnitons found in AtomBox, but whatever lol.
 

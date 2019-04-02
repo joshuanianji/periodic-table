@@ -96,6 +96,7 @@ atomBoxBackground =
 
 solidState : Color
 solidState =
+    -- rgb255 132 132 138 -- for grey
     rgb255 0 0 0
 
 

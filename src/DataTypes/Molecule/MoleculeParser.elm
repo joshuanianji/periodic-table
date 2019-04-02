@@ -21,7 +21,7 @@ import Set
 
 
 {-
-   Turns a Molecule into a list of Atoms
+   Decomposes a Molecule into a list of Atoms
 -}
 
 
@@ -62,7 +62,7 @@ toAtomList maybeMolecule =
 
 
 {-
-   Parse and display a Molecule! The big daddy function we expose. Since the Model holds our MaybeMolecule as the user types, we don't need to convert it again from the string
+   Parse and display a Molecule! The big function we expose. Since the Model holds our MaybeMolecule as the user types, we don't need to convert it again from the string
 -}
 
 
@@ -304,6 +304,8 @@ moleculeHelper molecule =
 
 {-
    this parser data is all the types of data that will occur throughout the molecule. I don't automatically convert them to the Molecule type because I want to store then by their element symbols first then convert them to Atoms. If i separate the code this way it'll be easier to catch errors and track them (but it's not like I have good error management anyways lol)
+
+   This even supports dick jokes! If the user types in "penis" or other variants I'll say "haha ur so funny lol"
 -}
 
 

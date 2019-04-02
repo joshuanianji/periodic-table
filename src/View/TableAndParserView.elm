@@ -16,7 +16,6 @@ import Model exposing (Model)
 import Molecule.MolarMass exposing (..)
 import Molecule.MoleculeParser exposing (..)
 import Msg exposing (Msg(..))
-import Navbar exposing (navbar)
 import TableAndParser.PeriodicTable exposing (periodicTable)
 
 

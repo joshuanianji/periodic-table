@@ -17,7 +17,6 @@ import Element.Background as Background
 import Html exposing (Html)
 import Model exposing (Directory(..), Model)
 import Msg exposing (Msg)
-import QuizzerView exposing (quizzerView)
 import TableAndParserView exposing (tableAndParserView)
 
 
