@@ -87,11 +87,11 @@ withoutfBlockElements pTableAtomList =
 
 
 
--- boxAtoms takes in a list of atoms and returns a list of elements where they are all in the periodic table boxes
+-- toBoxes takes in a list of atoms and returns a list of elements where they are all in the periodic table boxes
 
 
-boxAtoms : Model -> List PTableAtom -> List (Element Msg)
-boxAtoms model pTableAtoms =
+toBoxes : Model -> List PTableAtom -> List (Element Msg)
+toBoxes model pTableAtoms =
     map
         (pTableBox model)
         pTableAtoms
@@ -104,7 +104,7 @@ boxAtoms model pTableAtoms =
    g1 : Element msg
    g1 =
        filterAtoms 1
-           |> boxAtoms
+           |> toBoxes
            |> tableGroup
 
    so every group from 1 - 13 will be hard coded. But that's dumb and ruins the point of functional programming, so i changed it. I know have the function pTableGroup that takes in a group (an integer), the list of atoms and returns the column of atom boxes that are in that group
@@ -115,12 +115,12 @@ boxAtoms model pTableAtoms =
 pTableGroup : Model -> List PTableAtom -> Int -> Element Msg
 pTableGroup model pTableAtomList group =
     filterAtomGroup pTableAtomList group
-        |> boxAtoms model
+        |> toBoxes model
         |> tableGroup
 
 
 
--- These are the big periodic table bunches.
+-- These are the big periodic table bunches, separated by its columns
 
 
 upperPeriodicTableList : Model -> List (Element Msg)

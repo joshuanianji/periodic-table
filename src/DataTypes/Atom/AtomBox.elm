@@ -9,7 +9,6 @@
 module Atom.AtomBox exposing (pTableBox)
 
 import Atom.Atom exposing (..)
-import Atom.HardCodedData exposing (..)
 import Colours
 import Element exposing (Element, alignLeft, centerX, centerY, column, fill, maximum, minimum, pointer, row, text, width)
 import Element.Background as Background
@@ -36,19 +35,6 @@ atomSymbol atom =
 
 
 
--- just to display the element name below the element symbol
-
-
-atomName : Atom -> Element Msg
-atomName atom =
-    Element.el
-        [ centerX
-        , Font.size 10
-        ]
-        (text atom.name)
-
-
-
 -- displays the element number (amount of protons)
 
 
@@ -59,6 +45,19 @@ atomNum atom =
         , Font.size 8
         ]
         (text <| String.fromInt <| atom.protons)
+
+
+
+-- displays atomic molar mass below symbol
+
+
+atomMolarMass : Atom -> Element Msg
+atomMolarMass atom =
+    Element.el
+        [ centerX
+        , Font.size 8
+        ]
+        (text <| atom.weight)
 
 
 
@@ -93,7 +92,7 @@ atomBox : Model -> Atom -> Element Msg
 atomBox model atom =
     let
         attributes =
-            [ width (fill |> minimum 60)
+            [ width (Element.px 70)
             , Element.padding 10
             , Font.color Colours.fontColour
             , Border.widthEach borderWidths
@@ -113,7 +112,7 @@ atomBox model atom =
         attributes
         [ atomNum atom
         , atomSymbol atom
-        , atomName atom
+        , atomMolarMass atom
         ]
 
 
@@ -136,7 +135,7 @@ placeholderBox placeholder =
                     "89-103"
 
                 _ ->
-                    "BRUH"
+                    "THIS ISN'T SUPPOSED TO HAPPEN LOL SOMEONE HELP"
     in
     groupSpan
         |> text
@@ -147,8 +146,8 @@ placeholderBox placeholder =
             , centerX
             ]
         |> Element.el
-            [ width (fill |> minimum 60)
-            , Element.height (Element.px 70)
+            [ width (fill |> minimum 70)
+            , Element.height (Element.px 68)
             , Element.padding 10
             , Background.color Colours.atomBoxBackground
             , Font.color Colours.fontColour

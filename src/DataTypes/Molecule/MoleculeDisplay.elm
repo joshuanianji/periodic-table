@@ -59,9 +59,8 @@ moleculeTextHtml molecule =
                     Html.span
                         []
                         [ Html.text
-                            (" (Unable to find atom "
+                            ("error: Unknown Atom "
                                 ++ symbol
-                                ++ ") "
                             )
                         ]
 

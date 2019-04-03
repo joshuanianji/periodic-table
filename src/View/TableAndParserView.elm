@@ -92,7 +92,7 @@ displayedCompound model =
 displayedMolarMass : Model -> Element Msg
 displayedMolarMass model =
     model.moleculeData.inputMolecule
-        |> displayMolarMass
+        |> molarMassString
         |> appendTo " g/mol"
         |> Element.text
         |> Element.el

@@ -6,7 +6,7 @@
 -}
 
 
-module Molecule.MolarMass exposing (displayMolarMass)
+module Molecule.MolarMass exposing (molarMassString)
 
 import Atom.Atom exposing (..)
 import Maybe.Extra exposing (combine)
@@ -19,8 +19,8 @@ import Round exposing (round)
 -- calculates from a MaybeMolecule
 
 
-displayMolarMass : MaybeMolecule -> String
-displayMolarMass maybeMolecule =
+molarMassString : MaybeMolecule -> String
+molarMassString maybeMolecule =
     case maybeMolecule of
         GoodMolecule molecule ->
             molecule
@@ -34,16 +34,9 @@ displayMolarMass maybeMolecule =
 stringify : Maybe Float -> String
 stringify maybeMass =
     maybeMass
-        -- this rounds the number to three decimal places and converts it into a string
+        -- the `round` function rounds the number and also converts it into a string
         |> Maybe.map (round 3)
-        |> (\maybeMassString ->
-                case maybeMassString of
-                    Just mass ->
-                        mass
-
-                    Nothing ->
-                        "0.000"
-           )
+        |> Maybe.withDefault "0.000"
 
 
 

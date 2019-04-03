@@ -152,7 +152,7 @@ cleanErrorsToString deadends =
                 ExpectingKeyword keyword ->
                     -- literally should always do this - I have no other mention of keywords in my parser
                     if keyword == "H2O" then
-                        Just "Expecting water molecule after number to form hydrate"
+                        Just "Expecting a hydrate"
 
                     else
                         Nothing

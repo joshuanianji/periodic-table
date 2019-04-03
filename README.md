@@ -4,6 +4,8 @@ This README is mainly for me to document what I've done so far in this ia so I c
 
 # Changelog:
 
+## Wednesday, April 3
+Rip I deleted 
 
 ## February 5 - ZoomAtom
 
@@ -205,7 +207,7 @@ appBackgroundGray =
     rgb255 51 51 61
 ```
 
-The [HardCodedData.elm](src/Atom/HardCodedData.elm) is a module I initially tried to make to define all the atoms in the periodic table. I actually got like 24 atoms down before I realized that I could just import a JSON and parse it so I just did that lmao. I'm still keeping it here for the lols.
+The [HardCodedData.elm](src/Atom/HardCodedData.elm) is a module (which I deleted) I initially tried to make to define all the atoms in the periodic table. I actually got like 24 atoms down before I realized that I could just import a JSON and parse it so I just did that lmao. I'm still keeping it here for the lols.
 
 I actually made Caleb hard code some of the atoms. Since Atom is a type alias and a function, an example of defining an atom will be:
 
@@ -240,7 +242,7 @@ type Molecule
 
 To see this code in action, we first have to define how we actually get our Atoms. Pur `atomList` function in our [DataParser.elm](src/DataBase.DataParser.elm) file is only a list of the Atom type aliases, without any tags or anything, unlike dictionary - but maybe I'll make a dictionary as it also has a O(logn) time complexity for retrieving elements. Because of this, we have to search through the list linearly with my `retrieveAtom` fucntion (`String -> Maybe Atom`) that takes in the element name and outputs a maybe element. This is also defined in the [DataParser.elm](src/DataBase.DataParser.elm) file.
 
-Examples of this is seen in the [HardCodedMolecules.elm](src/DataBase.HardCodedMolecules.elm) file, or in the many comments in my [Molecule.elm](src/DataBase.Molecule.elm) file. I'll still talk about it here though haha.
+Examples of this is seen in the many comments in my [Molecule.elm](src/DataBase.Molecule.elm) file. I'll still talk about it here though haha.
 
 ```elm
 {-| Ba(SO4)2 -}
@@ -256,31 +258,6 @@ bariumSulfate =
         1
 ```
 
-#### HardCodedMolecules
-
-This is just a collection of molecules and polyatomic ions that I'll make a database of. For polyatomic ions I'll probably have to make a new type that specifies the charge as well, such as
-
-```elm
-type PolyAtomic
-    = PolyAtomic Molecule Int
-
-
-
--- example:
-
-
-sulfate : PolyAtomic
-sulfate =
-    PolyAtomic
-        Poly
-        [ Mono (retrieveAtom "Sulfur") 1
-        , Mono (retrieveAtom "Oxygen") 4
-        ]
-        2
-        -2
-```
-
-I haven't implemented this though lol.
 
 #### MoleculeDisplay
 

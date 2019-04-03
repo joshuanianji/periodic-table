@@ -490,6 +490,7 @@ atomData =
     "ypos": 4,
     "shells": [2, 8, 10, 2]
 }, {
+    
     "name": "Vanadium",
     "appearance": "blue-silver-gray metal",
     "atomic_mass": 50.94151,
