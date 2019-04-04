@@ -132,7 +132,11 @@ cleanErrorsToString deadends =
             case deadend.problem of
                 -- These are the errors I generate.
                 Problem string ->
-                    Just string
+                    if string == "" then
+                        Nothing
+
+                    else
+                        Just string
 
                 -- no closing parentheses
                 ExpectingSymbol symbol ->

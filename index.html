@@ -14301,7 +14301,7 @@ var author$project$Molecule$MoleculeParser$cleanErrorsToString = function (deade
 				switch (_n0.$) {
 					case 'Problem':
 						var string = _n0.a;
-						return elm$core$Maybe$Just(string);
+						return (string === '') ? elm$core$Maybe$Nothing : elm$core$Maybe$Just(string);
 					case 'ExpectingSymbol':
 						var symbol = _n0.a;
 						return (symbol === ')') ? elm$core$Maybe$Just('Remember to close your parentheses!') : elm$core$Maybe$Nothing;
