@@ -30,8 +30,8 @@ initModel =
 
 moleculeDataInit : MoleculeData
 moleculeDataInit =
-    { inputMoleculeString = "H"
-    , inputMolecule = stringToMolecule "H"
+    { inputMoleculeString = "CuSO4 5H2O"
+    , inputMolecule = stringToMolecule "CuSO4 5H2O"
     , selectedAtoms = []
     }
 
