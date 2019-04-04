@@ -365,7 +365,7 @@ atomParser =
             |> map Unknown
 
         -- If all else fails lol. I don't add anything because the other parsers will already have their own error statements.
-        , problem "unknown parser thing"
+        , problem ""
         ]
 
 
