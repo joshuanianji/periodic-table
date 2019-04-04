@@ -28,6 +28,12 @@ initModel =
     }
 
 
+
+{-
+   Although we have a "default" input string to help the user know what's happening, we have nothing in our selectedAtoms list, because we want to keep our periodic table clean and undefiled lol.
+-}
+
+
 moleculeDataInit : MoleculeData
 moleculeDataInit =
     { inputMoleculeString = "CuSO4 5H2O"
@@ -51,6 +57,7 @@ main =
         }
 
 
+
 {-
-    Here's all the element symbols lol : "HHeLiBeBCNOFNeNaMgAlSiPSClArKCaScTiVCrMnFeCoNiCuZnGaGeAsSeBrKrRbSrYZrNbMoTcRuRhPdAgCdInSbSnTeIXeCsBaLaCePrNdPmSmEuGdTbDyHoErTmYbLuHfTaWReOsIrPtAuHgTlPbBiPoAtRn"
+   Here's all the element symbols lol : "HHeLiBeBCNOFNeNaMgAlSiPSClArKCaScTiVCrMnFeCoNiCuZnGaGeAsSeBrKrRbSrYZrNbMoTcRuRhPdAgCdInSbSnTeIXeCsBaLaCePrNdPmSmEuGdTbDyHoErTmYbLuHfTaWReOsIrPtAuHgTlPbBiPoAtRn"
 -}
