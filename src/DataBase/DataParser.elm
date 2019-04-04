@@ -135,7 +135,6 @@ weightDecoder =
         roundFloat float =
             round 3 float
     in
-    -- tbh I have no idea about Decode.andThen but the code works so whatever.
     Decode.float
         |> Decode.andThen
             (\inputWeight ->
@@ -171,7 +170,7 @@ phaseChangeDecoder =
 
 
 {-
-   the actual decoder for an atom. Used in `atomListResult`
+   the actual decoder for an atom. Used in `atomList`
 
    I used the pipeline notation to convert json objects to type aliases instead of map functions from the Json.Decode.Pipeline module
 

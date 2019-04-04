@@ -99,6 +99,7 @@ atomBox model atom =
             , Border.color (Colours.sectionColour atom.section)
             , pointer
             , onClick (ZoomAtom atom)
+            , Element.spacing 2
             ]
                 |> (::)
                     (if List.member atom model.moleculeData.selectedAtoms then
@@ -140,14 +141,14 @@ placeholderBox placeholder =
     groupSpan
         |> text
         |> Element.el
-            [ Font.color (Colours.sectionColour placeholder.section)
+            [ Font.color Colours.fontColour
             , Font.size 15
             , centerY
             , centerX
             ]
         |> Element.el
             [ width (fill |> minimum 70)
-            , Element.height (Element.px 68)
+            , Element.height (Element.px 72)
             , Element.padding 10
             , Background.color Colours.atomBoxBackground
             , Font.color Colours.fontColour

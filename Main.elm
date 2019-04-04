@@ -49,3 +49,8 @@ main =
         , update = update
         , subscriptions = subscriptions
         }
+
+
+{-
+    Here's all the element symbols lol : "HHeLiBeBCNOFNeNaMgAlSiPSClArKCaScTiVCrMnFeCoNiCuZnGaGeAsSeBrKrRbSrYZrNbMoTcRuRhPdAgCdInSbSnTeIXeCsBaLaCePrNdPmSmEuGdTbDyHoErTmYbLuHfTaWReOsIrPtAuHgTlPbBiPoAtRn"
+-}

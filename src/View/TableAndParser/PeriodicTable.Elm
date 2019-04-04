@@ -107,43 +107,34 @@ toBoxes model pTableAtoms =
            |> toBoxes
            |> tableGroup
 
-   so every group from 1 - 13 will be hard coded. But that's dumb and ruins the point of functional programming, so i changed it. I know have the function pTableGroup that takes in a group (an integer), the list of atoms and returns the column of atom boxes that are in that group
+   so every group from 1 - 13 will be hard coded. But that's dumb and ruins the point of functional programming, so i changed it. I know have the function styleTableGroups that takes in a group (an integer), the list of atoms and returns the column of atom boxes that are in that group
 
 -}
 
 
-pTableGroup : Model -> List PTableAtom -> Int -> Element Msg
-pTableGroup model pTableAtomList group =
+styleTableGroups : Model -> List PTableAtom -> Int -> Element Msg
+styleTableGroups model pTableAtomList group =
     filterAtomGroup pTableAtomList group
         |> toBoxes model
         |> tableGroup
 
 
 
--- These are the big periodic table bunches, separated by its columns
-
-
-upperPeriodicTableList : Model -> List (Element Msg)
-upperPeriodicTableList model =
-    map
-        (pTableAtomList
-            |> withoutfBlockElements
-            |> pTableGroup model
-        )
-        (range 1 18)
-
-
-
--- this is to make the code easier to read. the periodicTableList thing is just the actual list, this creates the actual periodic table thing into one Element msg
+-- Upper Periodic Table is the periodic table for all the elements which aren't f block
 
 
 upperPeriodicTable : Model -> Element Msg
 upperPeriodicTable model =
-    row
-        [ spacing 2
-        , centerX
-        ]
-        (upperPeriodicTableList model)
+    map
+        (pTableAtomList
+            |> withoutfBlockElements
+            |> styleTableGroups model
+        )
+        (range 1 18)
+        |> row
+            [ spacing 2
+            , centerX
+            ]
 
 
 
@@ -151,23 +142,18 @@ upperPeriodicTable model =
 -- range 3 - 17 because the lanthanides and actinides go from group 3 to 17, at least from the JSON data lol
 
 
-lowerPeriodicTableList : Model -> List (Element Msg)
-lowerPeriodicTableList model =
+lowerPeriodicTable : Model -> Element Msg
+lowerPeriodicTable model =
     map
         (pTableAtomList
             |> getfBlockElements
-            |> pTableGroup model
+            |> styleTableGroups model
         )
         (range 3 17)
-
-
-lowerPeriodicTable : Model -> Element Msg
-lowerPeriodicTable model =
-    row
-        [ spacing 2
-        , centerX
-        ]
-        (lowerPeriodicTableList model)
+        |> row
+            [ spacing 2
+            , centerX
+            ]
 
 
 

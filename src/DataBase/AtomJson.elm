@@ -1,6 +1,6 @@
 module DataBase.AtomJson exposing (atomData)
 
--- This is a copy and paste from a json file, and I parse ir in DataParser.elm
+-- This is a copy and paste from a json file, and I parse it in DataParser.elm
 
 
 atomData =

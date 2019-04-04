@@ -51,10 +51,7 @@ toAtomList maybeMolecule =
                         Fail str ->
                             Nothing
                 )
-                (List.map
-                    identity
-                    (moleculeDecomposter molecule)
-                )
+                (moleculeDecomposter molecule)
 
         BadMolecule _ ->
             []

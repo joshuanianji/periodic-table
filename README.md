@@ -4,9 +4,6 @@ This README is mainly for me to document what I've done so far in this ia so I c
 
 # Changelog:
 
-## Wednesday, April 3
-Rip I deleted 
-
 ## February 5 - ZoomAtom
 
 Clicking the atom to reveal a more detailed page of the atom was a design from the start, but I wanted them to stay on the same page, and maybe just overlay the more detailed `Element Msg` **on top** of the periodic table. I decided not to do that, and instead directed the user to another page, or another view function entirely. 
@@ -334,9 +331,9 @@ I also have two functions that filters the atomList to leave out and only leave 
 
 I also have a fucntion called boxAtoms `boxAtoms : List Atom -> List (Element msg)` that takes in a list of atims and puts the atomBox around each one.
 
-Combining them, I got a function called `pTableGroup : List Atom -> Int -> Element msg` that takes in a list of atoms (esp. from the same group) and returns clean Element msg that is basically a periodic table column.
+Combining them, I got a function called `styleTableGroups : List Atom -> Int -> Element msg` that takes in a list of atoms (esp. from the same group) and returns clean Element msg that is basically a periodic table column.
 
-`upperPeriodicTableList : List (Element msg)` is basically an 18 element list of the pTableGroup. I use this list to create the actual "upper periodic table" (upperPeriodicTable : Element msg) that has the correct spacing and styling.
+`upperPeriodicTableList : List (Element msg)` is basically an 18 element list of the styleTableGroups. I use this list to create the actual "upper periodic table" (upperPeriodicTable : Element msg) that has the correct spacing and styling.
 
 `lowerPeriodicTable : Element msg` follows the same concept, and I then use `Element.column` to put the upper and lost periodic table on top of each other and make that `periodicTable : Element msg`. Exporting that to the [Main.elm](src/Main.elm), I have the periodic table!
 
