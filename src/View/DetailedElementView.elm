@@ -97,7 +97,7 @@ extraInfo atom =
         , spacing 20
         ]
         [ paragraph []
-            [ el [ Font.bold ] (text "Discovered: ")
+            [ el [ Font.bold ] (text "Discovered by: ")
             , el [ Font.light ] (text atom.discoveredBy)
             ]
         , paragraph []
