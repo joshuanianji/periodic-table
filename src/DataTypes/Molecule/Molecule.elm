@@ -17,7 +17,7 @@ import Parser exposing (DeadEnd)
 
    A molecule such as H2O would be
    Poly
-       [ Mono Hydrogen 2
+       [ Mono Hydrogen
        , Mono Oxygen 1 ]
        1
 
@@ -30,6 +30,7 @@ import Parser exposing (DeadEnd)
            ]
            2
        ]
+       1
 
     Of course, Barium, Sulfur, Hydrogen. etc. are just placeholders to represent the Atoms. I have no names of the atoms, they are all type aliases in one big list. So this just got more complicated.
 
