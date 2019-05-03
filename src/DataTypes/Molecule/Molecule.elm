@@ -17,16 +17,16 @@ import Parser exposing (DeadEnd)
 
    A molecule such as H2O would be
    Poly
-       [ Mono Hydrogen
+       [ Mono Hydrogen 2
        , Mono Oxygen 1 ]
        1
 
-   A molecule such as Ba(SO4)2 (barium sulfate) would be:
+   A molecule such as Ba(NO3)2 (barium nitrate) would be:
    Poly
        [ Mono Barium 1
        , Poly
-           [ Mono Sulfur 1
-           , Mono Oxygen 4
+           [ Mono Nitrogen 1
+           , Mono Oxygen 2
            ]
            2
        ]
@@ -66,7 +66,7 @@ type Molecule
    Unknown atoms (e.g. Sq)
    Other stuff? (sorry i can't think of any more lol)
 
-   The cool thing is there are multiple types of errors even they all lead to the same outcome - I can't find the specified atom. This means that the user will have a more comprehensive way to know what went wrong in the parser.
+   The cool thing is there are multiple types of errors even they all lead to the same outcome - I can't find the specified atom. This means that the user will have a more comprehensive way to know what went wrong in the parser (i.e. how incapable they are in using this calculator)
 -}
 
 

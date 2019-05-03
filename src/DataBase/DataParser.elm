@@ -206,7 +206,7 @@ atomDecoder =
 {-
 
    THE LIST OF ATOMS FROM THE JSON DATA (code looks pretty good man)
-   BIG thanks to https://riptutorial.com/elm/example/28373/decode-a-list-of-objects-containing-lists-of-objects for giving me example code. Thanks a ton! I had no idea what else to do before.
+   BIG thanks to https://riptutorial.com/elm/example/28373/decode-a-list-of-objects-containing-lists-of-objects for giving me example code. Thanks a ton! I had no idea what else to do before haha.
 
 -}
 

@@ -40,7 +40,7 @@ type alias PhaseChanges =
 
 
 
--- i made the name HardCodedAtomAlias to differentiate it between the Atom type in the DataParser. Lmao it used to be Atom
+-- Big boy data type for big boy atom
 
 
 type alias Atom =
@@ -57,7 +57,7 @@ type alias Atom =
     , summary : String -- a paragraph explaining  the element
     , discoveredBy : String -- "not found" if it is a null value
     , namedBy : String -- also "not found" if it is a null value
-    , phaseChanges : PhaseChanges -- which Kelvin Temperatures the element changes phases in
+    , phaseChanges : PhaseChanges -- which Kelvin temperatures the element changes phases in
     }
 
 

@@ -1,6 +1,7 @@
 module DataBase.AtomJson exposing (atomData)
 
 -- This is a copy and paste from a json file, and I parse it in DataParser.elm
+-- lol I just used the elm file because exporting the string is easy.
 
 
 atomData =

@@ -11,7 +11,7 @@ import Colours
 import Element exposing (Element)
 import Element.Font as Font
 import Html exposing (Html)
-import List exposing (map)
+import List
 import Molecule.Molecule exposing (..)
 import Msg exposing (Msg)
 import String exposing (toInt)
@@ -69,7 +69,7 @@ moleculeTextHtml molecule =
             if quantity == 1 then
                 Html.span
                     []
-                    (map
+                    (List.map
                         moleculeTextHtml
                         atomList
                     )
@@ -78,7 +78,7 @@ moleculeTextHtml molecule =
                 Html.span
                     []
                     ([ Html.text "(" ]
-                        ++ map moleculeTextHtml atomList
+                        ++ List.map moleculeTextHtml atomList
                         ++ [ Html.text ")"
                            , Html.sub
                                 []
