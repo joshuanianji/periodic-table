@@ -1,7 +1,13 @@
 # Joshua's Compsci IA
 
-Before I made my README a changelog but that's kinda weird lol. I don't really know what to put here so uh,,,,,,yeah. Do I put a user documentation here? Like is it not user friendly enough? Just remember to put capitals in the molar mass calculator lol.
+This repository holds my code for my Compsci IA, which is a periodic table web app. See it in action [here](https://joshuanianji.github.io)!
 
-Oh I guess I should do something like "go to my [website](joshuanianji.github.io)" to access the actual thingy. My website literally has nothing else on it except this project rip so don't expect much.
+## Quick Info
 
-Anyways this place just holds my Elm code because the Elm compiles to javascript, so I just put the HTML file with the javascript inside the [joshuanianji.github.io](https://github.com/joshuanianji/joshuanianji.github.io) repository. That repo currently has 2 files lol.
+Written in [Elm](https://www.elm-lang.org), a functional programming language that compiles to Javascript. I have the compiled code on my [github pages repository](https://joshuanianji.github.io) (which currently only contains like 2 files lol)
+
+As of today, this only has a slightly interactive periodic table and a molar mass calculator.
+
+Please dont access the site on a mobile device or a small tablet oh my goodness it looks horrible.
+
+Ok so supposedly there's a thing called "Github Wiki" and I think that's really cool so I'm going to put all my other stuff there and leave my readme like this. 
