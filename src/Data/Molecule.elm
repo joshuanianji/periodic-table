@@ -205,16 +205,6 @@ viewMaybe molecule =
 
 
 
--- raw stuff for debugging. Shows the AtomParserData converted directly to a string. To use this you'll have to input the string the user inputs
-
-
-parserDebugDisplay : String -> Element msg
-parserDebugDisplay string =
-    Parser.run moleculeParser string
-        |> displayTextRaw
-
-
-
 -- converts our string to a Maybe molecule!
 
 
@@ -237,23 +227,6 @@ displayMoleculeClean maybeMolecule =
         BadMolecule errors ->
             cleanErrorsToString errors
                 |> Element.text
-
-
-
--- displays all the data as AtomParserData converted directly to a string
-
-
-displayTextRaw : Result (List DeadEnd) (List AtomParserData) -> Element msg
-displayTextRaw result =
-    Element.text <|
-        case result of
-            Ok atomData ->
-                atomData
-                    |> List.map Debug.toString
-                    |> String.join ","
-
-            Err error ->
-                allErrorsToString error
 
 
 
