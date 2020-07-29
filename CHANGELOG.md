@@ -1,8 +1,12 @@
 # Joshua's Compsci IA
 
-This README is mainly for me to document what I've done so far in this ia so I can write about it later.
+This README is mainly for me to document what I've done so far in this ia so I can write about it later in my IA.
 
 ## Changelog:
+
+## July 28, 2020 - Refactor
+
+I wanted to add a github corner link and found out that I was in the middle of refactoring the entire codebase! I finished that up, organizing the files based in Evan's talk called [The life of a file](https://www.youtube.com/watch?v=XpDsk374LDE). My functions were very SMALL, and it got super annoying so I copy and pasted them all into let statements lmao.
 
 ## February 5 - ZoomAtom
 
