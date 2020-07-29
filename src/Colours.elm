@@ -26,9 +26,8 @@ module Colours exposing
 -- this is responsible for the material design dark colours - basically just naming them lol.
 -- rgb takes in a value between 0 and 1 - not 1 and 255, so I use rgb255
 
-import Atom.Atom exposing (Section(..), State(..))
-import Element exposing (Color, rgb, rgb255, rgba)
-import Element.Background exposing (color)
+import Data.Atom exposing (Section(..), State(..))
+import Element exposing (Color, rgb255, rgba)
 
 
 
@@ -211,7 +210,7 @@ lanthanide =
 
 
 
--- magents ish for actinides
+-- magentish for actinides
 
 
 actinide : Color
@@ -242,7 +241,6 @@ stateColour state =
 
 
 -- function used to get Section (e.g. Alkali, AlialineEarth, etc.) and return the corresponding colour associated with it
--- TODO: lanthanide and actinide colours - maybe also make the s for the metals more different?
 
 
 sectionColour : Section -> Color

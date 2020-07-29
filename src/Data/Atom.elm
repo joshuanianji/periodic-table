@@ -1,4 +1,15 @@
-module Atom.Atom exposing (Atom, MaybeAtom(..), PTableAtom(..), PhaseChanges, Placeholder, Section(..), State(..))
+module Data.Atom exposing
+    ( Atom
+    , MaybeAtom(..)
+    , PTableAtom(..)
+    , PhaseChanges
+    , Placeholder
+    , Section(..)
+    , State(..)
+    , errorAtom
+    , sectionToString
+    , stateToString
+    )
 
 -- state at room temperature
 
@@ -8,6 +19,22 @@ type State
     | Liquid
     | Gas
     | UnknownState
+
+
+stateToString : State -> String
+stateToString state =
+    case state of
+        Solid ->
+            "Solid"
+
+        Liquid ->
+            "Liquid"
+
+        Gas ->
+            "Gas"
+
+        UnknownState ->
+            "UnknownState"
 
 
 
@@ -27,6 +54,46 @@ type Section
     | Lanthanide
     | Actinide
     | UnknownSection
+
+
+sectionToString : Section -> String
+sectionToString section =
+    case section of
+        Hydrogen ->
+            "Hydrogen"
+
+        Alkali ->
+            "Alkali"
+
+        AlkalineEarth ->
+            "AlkalineEarth"
+
+        TransitionMetal ->
+            "TransitionMetal"
+
+        PostTransitionMetal ->
+            "PostTransitionMetal"
+
+        Metalloid ->
+            "Metalloid"
+
+        NonMetal ->
+            "NonMetal"
+
+        Halogen ->
+            "Halogen"
+
+        NobleGas ->
+            "NobleGas"
+
+        Lanthanide ->
+            "Lanthanide"
+
+        Actinide ->
+            "Actinide"
+
+        UnknownSection ->
+            "UnknownSection"
 
 
 
@@ -96,3 +163,28 @@ type PTableAtom
 type MaybeAtom
     = Success Atom
     | Fail String -- the string is the Atom Symbol and it helps for debugging
+
+
+
+-- the atom to show when an error happens
+
+
+errorAtom : Atom
+errorAtom =
+    Atom
+        "Error"
+        "Err"
+        Gas
+        TransitionMetal
+        1
+        1
+        1
+        "69.6969"
+        [ 6, 9 ]
+        "https://en.wikipedia.org/wiki/PewDiePie_vs_T-Series"
+        "ree"
+        "Joshua Ji"
+        "Penis Parker"
+        { melt = Just 2000
+        , boil = Just 4000
+        }

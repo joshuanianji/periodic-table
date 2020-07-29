@@ -1,39 +1,12 @@
-module DataBase.DataParser exposing (atomList, errorAtom, pTableAtomList, retrieveAtom)
+module DataBase.DataParser exposing (atomList, pTableAtoms, retrieveAtom)
 
 -- this module is used to parse the data.json (in AtomJson.elm) into a list of atoms
 
-import Atom.Atom exposing (..)
+import Data.Atom as Atom exposing (Atom, MaybeAtom, PTableAtom, PhaseChanges, Section(..), State(..))
 import DataBase.AtomJson as AtomJson
 import Json.Decode as Decode exposing (Decoder, Error(..))
 import Json.Decode.Pipeline exposing (hardcoded, required)
-import Result.Extra as Result
-import Round exposing (round)
-
-
-
--- the atom to show when an error happens
-
-
-errorAtom : Atom
-errorAtom =
-    Atom
-        "Error"
-        "Err"
-        Gas
-        TransitionMetal
-        1
-        1
-        1
-        "69.6969"
-        [ 6, 9 ]
-        "https://en.wikipedia.org/wiki/PewDiePie_vs_T-Series"
-        "ree"
-        "Joshua Ji"
-        "Penis Parker"
-        (PhaseChanges
-            (Just 2000)
-            (Just 4000)
-        )
+import Round
 
 
 
@@ -127,13 +100,9 @@ sectionDecoder =
 weightDecoder : Decoder String
 weightDecoder =
     let
-        atomWeightResult =
-            Decode.decodeString Decode.float
-
         -- rounding the weight to 3 decimal places. Converts it into a string!!
-        roundFloat : Float -> String
         roundFloat float =
-            round 3 float
+            Round.round 3 float
     in
     Decode.float
         |> Decode.andThen
@@ -227,12 +196,12 @@ atomList =
 
 placeholders : List PTableAtom
 placeholders =
-    [ PTablePlaceholder
+    [ Atom.PTablePlaceholder
         { name = "Lanthanide"
         , section = Lanthanide
         , xpos = 3
         }
-    , PTablePlaceholder
+    , Atom.PTablePlaceholder
         { name = "Actinide"
         , section = Actinide
         , xpos = 3
@@ -244,10 +213,10 @@ placeholders =
 --Here is the list where I store the atoms ready to be shown in the Periodic Table. i.e. I have the Lanthanide and Actinide placeholder here
 
 
-pTableAtomList : List PTableAtom
-pTableAtomList =
+pTableAtoms : List PTableAtom
+pTableAtoms =
     List.map
-        (\atom -> PTableAtom atom)
+        (\atom -> Atom.PTableAtom atom)
         atomList
         ++ placeholders
 
@@ -267,8 +236,8 @@ retrieveAtom symbol =
     in
     case filteredAtomList of
         [ a ] ->
-            Success a
+            Atom.Success a
 
         _ ->
             -- if there is anything else - e.g. multiple elements or no elements in the list, we will return nothing.
-            Fail symbol
+            Atom.Fail symbol

@@ -10,4 +10,11 @@ This repository holds my code for my Compsci IA, which is a periodic table web a
 
 * Please dont access the site on a mobile device or a small tablet oh my goodness it looks horrible.
 
-* Ok so supposedly there's a thing called "Github Wiki" and I think that's really cool so I'm going to put all my other stuff there and leave my readme like this. 
+
+## Run Locally
+
+Once you installed the stuff, run 
+
+`elm-live src/Main.elm --pushstate -- --output=elm.js`
+
+in the root folder to get started!

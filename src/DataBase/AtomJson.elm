@@ -4,6 +4,7 @@ module DataBase.AtomJson exposing (atomData)
 -- lol I just used the elm file because exporting the string is easy.
 
 
+atomData : String
 atomData =
     """
 [{
