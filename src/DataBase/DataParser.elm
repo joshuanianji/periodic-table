@@ -16,8 +16,8 @@ import Round
 removeResult : Result error (List a) -> List a
 removeResult result =
     case result of
-        Err err ->
-            Debug.log ("error while pruning Atom List: " ++ Debug.toString err) []
+        Err _ ->
+            []
 
         Ok list ->
             list

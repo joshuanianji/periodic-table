@@ -460,22 +460,22 @@ moleculeHelper molecule =
     let
         checkMolecule atomsSoFar atomData =
             case atomData of
-                SingleAtom atom amount ->
-                    Parser.Loop (Debug.log "Added SingleAtom" atomData :: atomsSoFar)
+                SingleAtom _ _ ->
+                    Parser.Loop (atomData :: atomsSoFar)
 
-                PolyAtom atoms amount ->
-                    Parser.Loop (Debug.log "added PolyAtom" atomData :: atomsSoFar)
+                PolyAtom _ _ ->
+                    Parser.Loop (atomData :: atomsSoFar)
 
-                HydrateAtom amount ->
-                    Parser.Loop (Debug.log "added Hydrate " atomData :: atomsSoFar)
+                HydrateAtom _ ->
+                    Parser.Loop (atomData :: atomsSoFar)
 
                 Unknown str ->
                     if str == "" then
-                        Parser.Done (List.reverse (Debug.log "we're done! Atoms so far is" atomsSoFar))
+                        Parser.Done (List.reverse atomsSoFar)
 
                     else
                         -- I'm pretty sure this doesn't happen
-                        Parser.Done (List.reverse (Debug.log "Terminated unsuccessfully!" atomsSoFar))
+                        Parser.Done (List.reverse atomsSoFar)
     in
     Parser.succeed (checkMolecule molecule)
         |= atomParser
