@@ -523,7 +523,9 @@ atomZoomContent model =
 
                 -- info about when it boils, whe it melts, etc. I made it colourful so its a lot of code lol
                 , Element.column
-                    [ Element.width Element.fill ]
+                    [ Element.width Element.fill
+                    , Element.spacing 4 
+                    ]
                     [ Element.paragraph []
                         [ Element.el [ Font.bold, Font.color Colours.liquidState ] (Element.text "Melting")
                         , Element.el [] (Element.text " / ")
