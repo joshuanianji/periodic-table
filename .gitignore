@@ -1,4 +1,5 @@
 #ignores the elm-stuff folder
 /elm-stuff/
 TODO
-elm.js
+elm*.js
+node_modules/

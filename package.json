@@ -1,0 +1,25 @@
+{
+  "name": "ptable",
+  "version": "1.0.0",
+  "description": "This repository holds my code for my Compsci IA, which is a periodic table web app. See it in action [here](https://joshuaji.com/projects/ptable)!",
+  "main": "elm.js",
+  "scripts": {
+    "build": "./scripts/optimize.sh src/Main.elm",
+    "start": "elm-live src/Main.elm --dir=./public --pushstate -- --output=public/elm.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joshuanianji/Compsci-IA.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joshuanianji/Compsci-IA/issues"
+  },
+  "homepage": "https://github.com/joshuanianji/Compsci-IA#readme",
+  "devDependencies": {
+    "elm-live": "^4.0.2",
+    "uglify-js": "^3.14.4"
+  }
+}
