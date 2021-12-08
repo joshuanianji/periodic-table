@@ -12,7 +12,6 @@ import Element.Border as Border
 import Element.Events as Events
 import Element.Font as Font
 import Element.Input as Input
-import GithubLogo
 import Html exposing (Html)
 import Round
 
@@ -127,16 +126,6 @@ htmlPage pageElements =
         }
         [ Background.color Colours.appBackgroundGray
         , Element.padding 10
-        , GithubLogo.view
-            { href = "https://github.com/joshuanianji/Compsci-IA"
-            , bgColor = "#fff"
-            , bodyColor = "#33333d" -- app background gray
-            }
-            |> Element.el
-                [ Element.alignRight
-                , Element.alignTop
-                ]
-            |> Element.inFront
         ]
         pageElements
 
