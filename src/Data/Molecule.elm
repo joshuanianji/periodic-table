@@ -199,9 +199,8 @@ molarMass molecule =
 
 
 viewMaybe : MaybeMolecule -> Element msg
-viewMaybe molecule =
-    molecule
-        |> displayMoleculeClean
+viewMaybe =
+    displayMoleculeClean
 
 
 
@@ -564,8 +563,8 @@ checkAtomName : AtomParserData -> Parser AtomParserData
 checkAtomName atomParserData =
     case atomParserData of
         SingleAtom name _ ->
-            if String.length name > 2 then
-                Parser.problem ("Unknown atom " ++ name)
+            if String.length name > 1000 then
+                Parser.problem ("Unknown atom: " ++ name)
 
             else
                 Parser.succeed atomParserData
