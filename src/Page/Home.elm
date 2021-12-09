@@ -354,8 +354,15 @@ viewParsedMolecule ss parsedMolecule =
         Molecule.LeFunny ->
             Element.image
                 []
-                { src = ss.sigmaStare
+                { src = ss.media.sigmaStare
                 , description = "This is not a molecule. This is a bad attempt at a funny joke."
+                }
+        
+        Molecule.Remilk ->
+            Element.image
+                []
+                { src = ss.media.remilkLook
+                , description = "THE FIRST MILK MADE WITHOUT A COW!"
                 }
 
         Molecule.Bad errors ->

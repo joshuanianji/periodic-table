@@ -8,6 +8,7 @@ import Data.PeriodicTable as PeriodicTable exposing (PeriodicTable)
 import Maybe.Extra
 import Parser exposing ((|.), (|=), DeadEnd, Parser, Step)
 import Set
+import Util.Parser
 
 
 
@@ -76,6 +77,7 @@ type Molecule
 type ParsedMolecule
     = Good Molecule
     | LeFunny -- when the user types in a funny
+    | Remilk -- only when the user types in remilk
     | Bad (List DeadEnd)
 
 
@@ -128,6 +130,7 @@ fromString ptable string =
 type MoleculeWithMemes
     = ActualMolecule (List AtomParserData)
     | LeFunnyThing
+    | RemilkMaguire
 
 
 moleculeWithMemeParser : Parser MoleculeWithMemes
@@ -135,15 +138,21 @@ moleculeWithMemeParser =
     Parser.oneOf
         [ Parser.map ActualMolecule moleculeParser
         , Parser.map (always LeFunnyThing) parseFunny
+        , Parser.map (always RemilkMaguire) parseRemilk
         ]
 
 -- reserved when the user is a top notch comedian
 parseFunny : Parser ()
 parseFunny =
-    ["poop", "penis", "amongus", "pp", "amogus", "sus", "sussy"]
-        |> List.map Parser.token 
+    ["poop", "penis", "amongus", "amogus", "sus", "sussy"]
+        |> List.map Util.Parser.iToken 
         |> Parser.oneOf 
 
+parseRemilk : Parser ()
+parseRemilk = 
+    ["remilk"]
+        |> List.map Util.Parser.iToken
+        |> Parser.oneOf 
 
 
 -- when I'm debugging and want every single error
@@ -224,6 +233,9 @@ toMolecule ptable test =
     case test of
         Ok LeFunnyThing ->
             LeFunny 
+        
+        Ok RemilkMaguire ->
+            Remilk
         
         Ok (ActualMolecule parsedAtomData) ->
             parserDataToCompound ptable parsedAtomData 1
@@ -479,6 +491,9 @@ toAtomList ptable parsedMolecule =
                 (moleculeDecomposter molecule)
 
         LeFunny -> 
+            []
+        
+        Remilk ->
             []
 
         Bad _ ->
