@@ -20,9 +20,6 @@
   },
   "homepage": "https://github.com/joshuanianji/Compsci-IA#readme",
   "devDependencies": {
-    "elm-format": "^0.8.5",
-    "elm-live": "^4.0.2",
-    "uglify-js": "^3.14.4",
     "vite": "^2.7.1",
     "vite-plugin-elm": "^2.5.1"
   }
