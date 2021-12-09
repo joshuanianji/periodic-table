@@ -1,16 +1,20 @@
-module Router exposing (Model, Msg, init, view, update, subscriptions,updateRoute)
+module Router exposing (Model, Msg, init, subscriptions, update, updateRoute, view)
 
-import Routes exposing (Route)
-import Page.Home as Home 
-import Page.Atom as Atom 
-import Page.NotFound as NotFound
-import SharedState exposing (SharedState)
-import Html exposing (Html)
-import Element 
-import Element.Background as Background
 import Colours
+import Element
+import Element.Background as Background
+import Html exposing (Html)
+import Page.Atom as Atom
+import Page.Home as Home
+import Page.NotFound as NotFound
+import Routes exposing (Route)
+import SharedState exposing (SharedState)
+
+
 
 ---- MODEL ----
+
+
 type alias Model =
     { page : Page
     , route : Maybe Route
@@ -23,14 +27,11 @@ type Page
     | NotFound NotFound.Model
 
 
-
-
 init : SharedState -> Maybe Route -> Model
 init sharedState route =
-    { page = routeToPage route sharedState 
+    { page = routeToPage route sharedState
     , route = route
     }
-
 
 
 routeToPage : Maybe Route -> SharedState -> Page
@@ -39,13 +40,12 @@ routeToPage route sharedState =
         Just Routes.Home ->
             Home <| Home.init sharedState
 
-
         Just (Routes.Atom name) ->
             Atom <| Atom.init sharedState name
 
-
         Nothing ->
             NotFound <| NotFound.init
+
 
 
 ---- VIEW ----
@@ -56,32 +56,38 @@ view sharedState model =
     let
         pageView =
             case model.page of
-                Home subModel -> 
+                Home subModel ->
                     Home.view sharedState subModel
                         |> Element.map HomeMsg
-                Atom subModel -> 
+
+                Atom subModel ->
                     Atom.view sharedState subModel
                         |> Element.map AtomMsg
-                NotFound subModel -> 
+
+                NotFound subModel ->
                     NotFound.view subModel
                         |> Element.map NotFoundMsg
-    in 
+    in
     Element.column
         [ Element.width Element.fill
         , Element.height Element.fill
         , Background.color Colours.appBackgroundGray
         ]
         [ pageView ]
-        |> Element.layout  [ ]
+        |> Element.layout []
+
 
 
 ---- UPDATE ----
 
-type Msg 
+
+type Msg
     = UpdateRoute (Maybe Route)
-    | HomeMsg Home.Msg 
-    | AtomMsg Atom.Msg 
-    | NotFoundMsg NotFound.Msg 
+    | HomeMsg Home.Msg
+    | AtomMsg Atom.Msg
+    | NotFoundMsg NotFound.Msg
+
+
 
 -- Main.elm calls this wrapper function when a new URL changes
 -- this just lets us not expose the entire Msg(..) type
@@ -92,34 +98,35 @@ updateRoute =
     UpdateRoute
 
 
-update : SharedState -> Msg -> Model -> (Model, Cmd Msg)
-update sharedState msg model = 
-    case (model.page, msg) of
-        (_, UpdateRoute route) ->
+update : SharedState -> Msg -> Model -> ( Model, Cmd Msg )
+update sharedState msg model =
+    case ( model.page, msg ) of
+        ( _, UpdateRoute route ) ->
             let
-                newPage = routeToPage route sharedState
+                newPage =
+                    routeToPage route sharedState
             in
-            ( { model | 
-                page = newPage
+            ( { model
+                | page = newPage
                 , route = route
               }
             , Cmd.none
             )
 
-        (Home subModel, HomeMsg subMsg) ->
+        ( Home subModel, HomeMsg subMsg ) ->
             Home.update sharedState subMsg subModel
                 |> updateWith Home HomeMsg model
 
-        (Atom subModel, AtomMsg subMsg) ->
+        ( Atom subModel, AtomMsg subMsg ) ->
             Atom.update sharedState subMsg subModel
                 |> updateWith Atom AtomMsg model
-        
-        (NotFound subModel, NotFoundMsg subMsg) ->
+
+        ( NotFound subModel, NotFoundMsg subMsg ) ->
             NotFound.update sharedState subMsg subModel
                 |> updateWith NotFound NotFoundMsg model
 
-        (_, _) ->
-            (model, Cmd.none)
+        ( _, _ ) ->
+            ( model, Cmd.none )
 
 
 
@@ -131,10 +138,14 @@ updateWith : (subModel -> Page) -> (subMsg -> Msg) -> Model -> ( subModel, Cmd s
 updateWith toPage toMsg model ( subModel, subMsg ) =
     ( { model | page = toPage subModel }
     , Cmd.batch
-        [ Cmd.map toMsg subMsg]
+        [ Cmd.map toMsg subMsg ]
     )
+
+
 
 ---- SUBSCRIPTIONS ----
 
-subscriptions : Model -> Sub Msg 
-subscriptions _ = Sub.none
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.none

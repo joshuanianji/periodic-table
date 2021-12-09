@@ -1,9 +1,9 @@
-module Routes exposing (Route(..), navigateTo, fromUrl, tabTitle)
+module Routes exposing (Route(..), fromUrl, navigateTo, tabTitle)
 
+import Browser.Navigation as Nav
 import Data.Atom exposing (Atom)
-import Browser.Navigation as Nav 
-import Url.Parser as Url exposing (Parser, (</>))
 import Url exposing (Url)
+import Url.Parser as Url exposing ((</>), Parser)
 
 
 
@@ -15,15 +15,17 @@ type Route
     | Atom AtomName
 
 
-type alias AtomName = String 
+type alias AtomName =
+    String
 
 
 urlParser : Parser (Route -> a) a
 urlParser =
-  Url.oneOf
-    [ Url.map Home Url.top -- "/"
-    , Url.map Atom Url.string -- "/<atom name>"
-    ]
+    Url.oneOf
+        [ Url.map Home Url.top -- "/"
+        , Url.map Atom Url.string -- "/<atom name>"
+        ]
+
 
 
 -- PUBLIC HELPERS
@@ -31,12 +33,14 @@ urlParser =
 
 navigateTo : Nav.Key -> Route -> Cmd msg
 navigateTo key route =
-    Nav.pushUrl key (toUrlString route) 
+    Nav.pushUrl key (toUrlString route)
+
 
 fromUrl : Url -> Maybe Route
 fromUrl url =
     { url | path = Maybe.withDefault "" url.fragment, fragment = Nothing }
         |> Url.parse urlParser
+
 
 tabTitle : Maybe Route -> String
 tabTitle route =
@@ -55,7 +59,9 @@ tabTitle route =
     prefix ++ "PTable"
 
 
+
 -- INTERNAL
+
 
 toUrlString : Route -> String
 toUrlString route =
@@ -66,7 +72,6 @@ toUrlString route =
                     []
 
                 Atom name ->
-                    [name]
-
+                    [ name ]
     in
     "#/" ++ String.join "/" urlPieces

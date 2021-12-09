@@ -4,12 +4,12 @@
 module Data.Molecule exposing (MaybeMolecule(..), Molecule(..), fromString, molarMass, toAtomList, view, viewMaybe)
 
 import Data.Atom as Atom exposing (Atom, MaybeAtom)
+import Data.PeriodicTable as PeriodicTable exposing (PeriodicTable)
 import Element exposing (Element)
 import Html
 import Maybe.Extra
 import Parser exposing ((|.), (|=), DeadEnd, Parser, Step)
 import Set
-import Data.PeriodicTable as PeriodicTable exposing (PeriodicTable)
 
 
 
@@ -370,7 +370,7 @@ parserDataToCompound ptable atomParserData amount =
     let
         compoundList =
             List.map
-                (parserDatumToCompound ptable) 
+                (parserDatumToCompound ptable)
                 atomParserData
                 |> Maybe.Extra.combine
     in
@@ -594,9 +594,9 @@ toAtomList ptable maybeMolecule =
 
                         Hydrate _ ->
                             [ PeriodicTable.findAtom "H" ptable
-                            , PeriodicTable.findAtom "O" ptable 
+                            , PeriodicTable.findAtom "O" ptable
                             ]
-                            |> List.map Atom.fromMaybe
+                                |> List.map Atom.fromMaybe
             in
             List.filterMap
                 (\maybeAtom ->

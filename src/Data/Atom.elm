@@ -4,11 +4,11 @@ module Data.Atom exposing
     , PhaseChanges
     , Section(..)
     , State(..)
+    , decoder
+    , fromMaybe
+    , isFBlock
     , sectionToString
     , stateToString
-    , decoder
-    , isFBlock
-    , fromMaybe
     )
 
 -- state at room temperature
@@ -129,7 +129,6 @@ type alias PhaseChanges =
 
 
 
-
 {-
    in instances such as the Molar Mass calculator, the user may not input a correct atom symbol. Then we have an error.
 
@@ -144,6 +143,7 @@ type alias PhaseChanges =
 type MaybeAtom
     = Success Atom
     | Fail String -- the string is the Atom Symbol and it helps for debugging
+
 
 
 ---- DECODERS
@@ -179,6 +179,7 @@ phaseChangeDecoder =
         -- Decode.nullable makes it a Maybe type - Nothing if it is a null
         |> required "melt" (Decode.nullable Decode.float)
         |> required "boil" (Decode.nullable Decode.float)
+
 
 stateDecoder : Decoder State
 stateDecoder =
@@ -271,13 +272,16 @@ badName =
         ]
 
 
+
 ---- HELPERS
 
+
 isFBlock : Atom -> Bool
-isFBlock atom = atom.section == Lanthanide || atom.section == Actinide
+isFBlock atom =
+    atom.section == Lanthanide || atom.section == Actinide
 
 
-fromMaybe : Maybe Atom -> MaybeAtom 
+fromMaybe : Maybe Atom -> MaybeAtom
 fromMaybe maybeAtom =
     case maybeAtom of
         Nothing ->
