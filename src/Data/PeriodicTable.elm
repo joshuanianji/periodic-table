@@ -53,10 +53,10 @@ placeholders =
 
 ---- PUBLIC HELPERS
 
--- finds an atom by name
+-- finds an atom by symbol
 
 findAtom : String -> PeriodicTable -> Maybe Atom
-findAtom name (PeriodicTable atoms _) = Util.find (\atom -> atom.name == name) atoms
+findAtom name (PeriodicTable atoms _) = Util.find (\atom -> atom.symbol == name) atoms
 
 -- get a column of elements
 
