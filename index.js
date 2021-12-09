@@ -1,5 +1,6 @@
 import { Elm } from './src/Main.elm'
 import ptable from './assets/elements.json'
+import sigmaStare from './assets/sigma-stare.png'
 
 // Main entrypoint of the Vite app (I think)
 
@@ -10,6 +11,7 @@ Elm.Main.init({
         windowSize: {
             height: window.innerHeight,
             width: window.innerWidth
-        }
+        },
+        sigmaStare: sigmaStare
     }
 })

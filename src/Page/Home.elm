@@ -9,7 +9,7 @@ module Page.Home exposing
 
 import Colours
 import Data.Atom as Atom exposing (Atom)
-import Data.Molecule as Molecule exposing (MaybeMolecule)
+import Data.Molecule as Molecule exposing (ParsedMolecule, Molecule)
 import Data.PeriodicTable as PeriodicTable
 import Element exposing (Element)
 import Element.Background as Background
@@ -20,6 +20,8 @@ import Element.Input as Input
 import Round
 import Routes exposing (Route)
 import SharedState exposing (SharedState)
+import Parser exposing (DeadEnd)
+import Html
 
 
 
@@ -28,7 +30,7 @@ import SharedState exposing (SharedState)
 
 type alias Model =
     { inputMoleculeString : String
-    , inputMolecule : MaybeMolecule
+    , inputMolecule : ParsedMolecule
     , selectedAtoms : List Atom
     }
 
@@ -117,84 +119,16 @@ Element.paddingEach { top = 0, right = 0, left = 400, bottom = 0 }
 -}
 view : SharedState -> Model -> Element Msg
 view ss model =
-    let
-        -- stringify molar mass
-        stringifyMolarMass maybeMass =
-            maybeMass
-                -- the `round` function rounds the number and also converts it into a string
-                |> Maybe.map (Round.round 3)
-                |> Maybe.withDefault "0.000"
-
-        molarMassString maybeMolecule =
-            case maybeMolecule of
-                Molecule.GoodMolecule molecule ->
-                    Molecule.molarMass molecule
-                        |> stringifyMolarMass
-
-                _ ->
-                    "0.000"
-
-        displayedMolarMass =
-            (molarMassString model.inputMolecule ++ " g/mol")
-                |> Element.text
-                |> Element.el
-                    [ Element.centerX
-                    , Font.color Colours.fontColour
-                    , Font.size 30
-                    ]
-
-        -- the molecule which is displayed all fancy with the subscripts and stuff
-        displayedCompound =
-            Molecule.viewMaybe model.inputMolecule
-                -- parserDebugDisplay model.inputMoleculeString
-                |> Element.el
-                    [ Element.centerX
-                    , Font.color Colours.fontColour
-                    , Font.size 30
-                    ]
-
-        inputBorder =
-            Border.widthEach
-                { bottom = 1
-                , left = 0
-                , right = 0
-                , top = 0
-                }
-
-        -- the text box where the user inputs a molecule
-        compoundInput =
-            Input.text
-                [ Font.center
-                , Background.color Colours.appBackgroundGray
-                , inputBorder
-                , Border.rounded 0
-                , Font.color Colours.fontColour
-                ]
-                { onChange = UpdateMoleculeParser
-                , text = model.inputMoleculeString
-                , placeholder = Nothing
-                , label =
-                    Input.labelAbove
-                        [ Element.centerX
-                        , Font.color Colours.fontColour
-                        , Element.padding 10
-                        ]
-                        (Element.el []
-                            (Element.text "Get your Molar Mass of a Compound Here!")
-                        )
-                }
-    in
     Element.column
         [ Element.spacing 30
         , Element.centerX
         , Element.paddingXY 12 16
         ]
         [ periodicTable ss model
-        , compoundInput
-        , displayedCompound
-        , displayedMolarMass
+        , molarMassCalc ss model
         ]
 
+-- view periodic table stuff
 
 periodicTable : SharedState -> Model -> Element Msg
 periodicTable ss model =
@@ -326,6 +260,231 @@ viewPTableElem model pTableElem =
                     ]
 
 
+-- Molar Mass stuff
+
+molarMassCalc : SharedState -> Model -> Element Msg
+molarMassCalc ss model = 
+    let
+        -- stringify molar mass
+        stringifyMolarMass maybeMass =
+            maybeMass
+                -- the `round` function rounds the number and also converts it into a string
+                |> Maybe.map (Round.round 3)
+                |> Maybe.withDefault "0.000"
+
+        molarMassString parsedMolecule =
+            case parsedMolecule of
+                Molecule.Good molecule ->
+                    Molecule.molarMass molecule
+                        |> stringifyMolarMass
+                        |> Just
+
+                _ ->
+                    Nothing
+
+        displayedMolarMass =
+            Maybe.map 
+                (\txt -> 
+                    Element.el
+                        [ Element.centerX
+                        , Font.color Colours.fontColour
+                        , Font.size 30
+                        ]
+                        (Element.text <| txt ++ " g/mol")
+                )
+                (molarMassString model.inputMolecule)
+
+        -- the molecule which is displayed all fancy with the subscripts and stuff
+        displayedCompound =
+            viewParsedMolecule ss model.inputMolecule
+                -- parserDebugDisplay model.inputMoleculeString
+                |> Element.el
+                    [ Element.centerX
+                    , Font.color Colours.fontColour
+                    , Font.size 30
+                    ]
+
+        inputBorder =
+            Border.widthEach
+                { bottom = 1
+                , left = 0
+                , right = 0
+                , top = 0
+                }
+
+        -- the text box where the user inputs a molecule
+        compoundInput =
+            Input.text
+                [ Font.center
+                , Background.color Colours.appBackgroundGray
+                , inputBorder
+                , Border.rounded 0
+                , Font.color Colours.fontColour
+                ]
+                { onChange = UpdateMoleculeParser
+                , text = model.inputMoleculeString
+                , placeholder = Nothing
+                , label =
+                    Input.labelAbove
+                        [ Element.centerX
+                        , Font.color Colours.fontColour
+                        , Element.padding 10
+                        ]
+                        (Element.el []
+                            (Element.text "Get your Molar Mass of a Compound Here!")
+                        )
+                }
+    in
+    Element.column 
+        [ Element.width Element.fill
+        , Element.spacing 4 
+        ]
+        [ compoundInput
+        , displayedCompound
+        , Maybe.withDefault Element.none displayedMolarMass
+        ]
+
+
+viewParsedMolecule : SharedState -> ParsedMolecule -> Element Msg
+viewParsedMolecule ss parsedMolecule =
+    case parsedMolecule of
+        Molecule.Good molecule ->
+            viewMolecule molecule 
+        
+        Molecule.LeFunny ->
+            Element.image
+                []
+                { src = ss.sigmaStare
+                , description = "This is not a molecule. This is a bad attempt at a funny joke."
+                }
+
+        Molecule.Bad errors ->
+            stringifyDeadends errors
+                |> Element.text
+
+
+viewMolecule : Molecule -> Element Msg
+viewMolecule molecule =
+    let
+        -- view a molecule in HTML
+        -- using HTML so I can do subscripts really easily
+        viewHtml m =
+            case m of
+                -- if there's a mono, first check for the MaybeAtom. then display the atom symbol with the quantity as the subscript
+                Molecule.Mono maybeAtom quantity ->
+                    case maybeAtom of
+                        Atom.Success atom ->
+                            -- if there's only one of the atom don't write the subscript
+                            if quantity == 1 then
+                                Html.span
+                                    []
+                                    [ Html.text atom.symbol ]
+
+                            else
+                                Html.span
+                                    []
+                                    [ Html.text atom.symbol
+                                    , Html.sub
+                                        []
+                                        [ Html.text (String.fromInt quantity) ]
+                                    ]
+
+                        Atom.Fail symbol ->
+                            Html.span
+                                []
+                                [ Html.text ("error: Unknown Atom " ++ symbol) ]
+
+                -- If its a poly, map through the elements inside the poly. if the polyatomic is greater than 1, display parentheses around the atom (e.g.  Ba(SO4)2)
+                Molecule.Poly atomList quantity ->
+                    if quantity == 1 then
+                        Html.span
+                            []
+                        <|
+                            List.map viewHtml atomList
+
+                    else
+                        Html.span
+                            []
+                            (Html.text "("
+                                :: List.map viewHtml atomList
+                                ++ [ Html.text ")"
+                                   , Html.sub
+                                        []
+                                        [ Html.text (String.fromInt quantity) ]
+                                   ]
+                            )
+
+                Molecule.Hydrate amount ->
+                    let
+                        waterText =
+                            Html.span []
+                                [ Html.text "H"
+                                , Html.sub
+                                    []
+                                    [ Html.text "2" ]
+                                , Html.text "O"
+                                ]
+                    in
+                    if amount == 1 then
+                        Html.span
+                            []
+                            [ Html.text " • "
+                            , waterText
+                            ]
+
+                    else
+                        Html.span
+                            []
+                            [ Html.text " • "
+                            , Html.text (String.fromInt amount)
+                            , waterText
+                            ]
+    in
+    Element.html <| viewHtml molecule
+
+
+-- my own thing that converts all the errors / deadends the parser accumulates into a string, using the Elm DeadEnd type (https://package.elm-lang.org/packages/elm/parser/latest/Parser#DeadEnd) I use filterMap because I only want my own errors I wrote out - not the others. Those are represented in the Problem thing.
+
+
+stringifyDeadends : List DeadEnd -> String
+stringifyDeadends deadends =
+    List.filterMap
+        (\deadend ->
+            case deadend.problem of
+                -- These are the errors I generate.
+                Parser.Problem string ->
+                    if string == "" then
+                        Nothing
+
+                    else
+                        Just string
+
+                -- no closing parentheses
+                Parser.ExpectingSymbol symbol ->
+                    if symbol == ")" then
+                        Just "Remember to close your parentheses!"
+
+                    else
+                        Nothing
+
+                -- starts off with a number or without a capital
+                Parser.ExpectingVariable ->
+                    Just "Element symbols start off with an upper case letter!"
+
+                Parser.ExpectingKeyword keyword ->
+                    -- literally should always do this - I have no other mention of keywords in my parser
+                    if keyword == "H2O" then
+                        Just "Expecting a hydrate"
+
+                    else
+                        Nothing
+
+                _ ->
+                    Nothing
+        )
+        deadends
+        |> String.join ","
+        |> (++) "error: "
 
 ---- UPDATE
 

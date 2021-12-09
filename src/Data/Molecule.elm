@@ -1,12 +1,10 @@
 -- this module is just to define what a molecule is.
 
 
-module Data.Molecule exposing (MaybeMolecule(..), Molecule(..), fromString, molarMass, toAtomList, view, viewMaybe)
+module Data.Molecule exposing (ParsedMolecule(..), Molecule(..), fromString, molarMass, toAtomList)
 
 import Data.Atom as Atom exposing (Atom, MaybeAtom)
 import Data.PeriodicTable as PeriodicTable exposing (PeriodicTable)
-import Element exposing (Element)
-import Html
 import Maybe.Extra
 import Parser exposing ((|.), (|=), DeadEnd, Parser, Step)
 import Set
@@ -75,92 +73,10 @@ type Molecule
 -}
 
 
-type MaybeMolecule
-    = GoodMolecule Molecule
-    | BadMolecule (List DeadEnd)
-
-
-
--- VIEW
-
-
-view : Molecule -> Element msg
-view molecule =
-    let
-        -- view a molecule in HTML
-        viewHtml m =
-            case m of
-                -- if there's a mono, first check for the MaybeAtom. then display the atom symbol with the quantity as the subscript
-                Mono maybeAtom quantity ->
-                    case maybeAtom of
-                        Atom.Success atom ->
-                            -- if there's only one of the atom don't write the subscript
-                            if quantity == 1 then
-                                Html.span
-                                    []
-                                    [ Html.text atom.symbol ]
-
-                            else
-                                Html.span
-                                    []
-                                    [ Html.text atom.symbol
-                                    , Html.sub
-                                        []
-                                        [ Html.text (String.fromInt quantity) ]
-                                    ]
-
-                        Atom.Fail symbol ->
-                            Html.span
-                                []
-                                [ Html.text ("error: Unknown Atom " ++ symbol) ]
-
-                -- If its a poly, map through the elements inside the poly. if the polyatomic is greater than 1, display parentheses around the atom (e.g.  Ba(SO4)2)
-                Poly atomList quantity ->
-                    if quantity == 1 then
-                        Html.span
-                            []
-                        <|
-                            List.map viewHtml atomList
-
-                    else
-                        Html.span
-                            []
-                            (Html.text "("
-                                :: List.map viewHtml atomList
-                                ++ [ Html.text ")"
-                                   , Html.sub
-                                        []
-                                        [ Html.text (String.fromInt quantity) ]
-                                   ]
-                            )
-
-                Hydrate amount ->
-                    let
-                        waterText =
-                            Html.span []
-                                [ Html.text "H"
-                                , Html.sub
-                                    []
-                                    [ Html.text "2" ]
-                                , Html.text "O"
-                                ]
-                    in
-                    if amount == 1 then
-                        Html.span
-                            []
-                            [ Html.text " • "
-                            , waterText
-                            ]
-
-                    else
-                        Html.span
-                            []
-                            [ Html.text " • "
-                            , Html.text (String.fromInt amount)
-                            , waterText
-                            ]
-    in
-    Element.html <| viewHtml molecule
+type ParsedMolecule
+    = Good Molecule
+    | LeFunny -- when the user types in a funny
+    | Bad (List DeadEnd)
 
 
 
@@ -198,80 +114,35 @@ molarMass molecule =
 -- PARSER
 
 
-viewMaybe : MaybeMolecule -> Element msg
-viewMaybe =
-    displayMoleculeClean
-
-
-
 -- converts our string to a Maybe molecule!
 -- Requires the periodic table to lookup the atoms
 
 
-fromString : PeriodicTable -> String -> MaybeMolecule
+fromString : PeriodicTable -> String -> ParsedMolecule
 fromString ptable string =
-    Parser.run moleculeParser string
-        |> removeResult ptable
+    Parser.run moleculeWithMemeParser string
+        |> toMolecule ptable
 
 
 
--- cleanly displays the text or errors without the raw data
+type MoleculeWithMemes
+    = ActualMolecule (List AtomParserData)
+    | LeFunnyThing
 
 
-displayMoleculeClean : MaybeMolecule -> Element msg
-displayMoleculeClean maybeMolecule =
-    case maybeMolecule of
-        GoodMolecule molecule ->
-            view molecule
+moleculeWithMemeParser : Parser MoleculeWithMemes
+moleculeWithMemeParser =
+    Parser.oneOf
+        [ Parser.map ActualMolecule moleculeParser
+        , Parser.map (always LeFunnyThing) parseFunny
+        ]
 
-        BadMolecule errors ->
-            cleanErrorsToString errors
-                |> Element.text
-
-
-
--- my own thing that converts all the errors / deadends the parser accumulates into a string, using the Elm DeadEnd type (https://package.elm-lang.org/packages/elm/parser/latest/Parser#DeadEnd) I use filterMap because I only want my own errors I wrote out - not the others. Those are represented in the Problem thing.
-
-
-cleanErrorsToString : List DeadEnd -> String
-cleanErrorsToString deadends =
-    List.filterMap
-        (\deadend ->
-            case deadend.problem of
-                -- These are the errors I generate.
-                Parser.Problem string ->
-                    if string == "" then
-                        Nothing
-
-                    else
-                        Just string
-
-                -- no closing parentheses
-                Parser.ExpectingSymbol symbol ->
-                    if symbol == ")" then
-                        Just "Remember to close your parentheses!"
-
-                    else
-                        Nothing
-
-                -- starts off with a number or without a capital
-                Parser.ExpectingVariable ->
-                    Just "Element symbols start off with an upper case letter!"
-
-                Parser.ExpectingKeyword keyword ->
-                    -- literally should always do this - I have no other mention of keywords in my parser
-                    if keyword == "H2O" then
-                        Just "Expecting a hydrate"
-
-                    else
-                        Nothing
-
-                _ ->
-                    Nothing
-        )
-        deadends
-        |> String.join ","
-        |> (++) "error: "
+-- reserved when the user is a top notch comedian
+parseFunny : Parser ()
+parseFunny =
+    ["poop", "penis", "amongus", "pp", "amogus", "sus", "sussy"]
+        |> List.map Parser.token 
+        |> Parser.oneOf 
 
 
 
@@ -348,14 +219,17 @@ allErrorsToString deadends =
         |> (++) "error: "
 
 
-removeResult : PeriodicTable -> Result (List DeadEnd) (List AtomParserData) -> MaybeMolecule
-removeResult ptable test =
+toMolecule : PeriodicTable -> Result (List DeadEnd) MoleculeWithMemes -> ParsedMolecule
+toMolecule ptable test =
     case test of
-        Ok result ->
-            parserDataToCompound ptable result 1
+        Ok LeFunnyThing ->
+            LeFunny 
+        
+        Ok (ActualMolecule parsedAtomData) ->
+            parserDataToCompound ptable parsedAtomData 1
 
         Err error ->
-            BadMolecule error
+            Bad error
 
 
 
@@ -365,7 +239,7 @@ removeResult ptable test =
 -}
 
 
-parserDataToCompound : PeriodicTable -> List AtomParserData -> Int -> MaybeMolecule
+parserDataToCompound : PeriodicTable -> List AtomParserData -> Int -> ParsedMolecule
 parserDataToCompound ptable atomParserData amount =
     let
         compoundList =
@@ -376,17 +250,14 @@ parserDataToCompound ptable atomParserData amount =
     in
     case compoundList of
         Nothing ->
-            BadMolecule [ DeadEnd 1 1 (Parser.Problem "CompoundList is Nothing") ]
+            Bad [ DeadEnd 1 1 (Parser.Problem "CompoundList is Nothing") ]
 
         Just list ->
             if list == [] then
-                BadMolecule [ DeadEnd 1 1 (Parser.Problem "No recognized input specified") ]
+                Bad [ DeadEnd 1 1 (Parser.Problem "No recognized input specified") ]
 
             else
-                Poly
-                    list
-                    amount
-                    |> GoodMolecule
+                Good <| Poly list amount
 
 
 
@@ -402,7 +273,7 @@ parserDatumToCompound ptable data =
 
         PolyAtom atoms amount ->
             case parserDataToCompound ptable atoms amount of
-                GoodMolecule molecule ->
+                Good molecule ->
                     Just molecule
 
                 _ ->
@@ -457,8 +328,6 @@ moleculeHelper molecule =
 
 {-
    this parser data is all the types of data that will occur throughout the molecule. I don't automatically convert them to the Molecule type because I want to store then by their element symbols first then convert them to Atoms. If i separate the code this way it'll be easier to catch errors and track them (but it's not like I have good error management anyways lol)
-
-   This even supports dick jokes! If the user types in "penis" or other variants I'll say "haha ur so funny lol"
 -}
 
 
@@ -578,10 +447,10 @@ checkAtomName atomParserData =
 -- HELPERS
 
 
-toAtomList : PeriodicTable -> MaybeMolecule -> List Atom
-toAtomList ptable maybeMolecule =
-    case maybeMolecule of
-        GoodMolecule molecule ->
+toAtomList : PeriodicTable -> ParsedMolecule -> List Atom
+toAtomList ptable parsedMolecule =
+    case parsedMolecule of
+        Good molecule ->
             let
                 -- returns List MaybeAtom
                 moleculeDecomposter mol =
@@ -609,5 +478,8 @@ toAtomList ptable maybeMolecule =
                 )
                 (moleculeDecomposter molecule)
 
-        BadMolecule _ ->
+        LeFunny -> 
+            []
+
+        Bad _ ->
             []

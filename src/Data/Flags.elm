@@ -8,6 +8,7 @@ import Json.Decode.Pipeline as Pipeline
 type alias Flags =
     { windowSize : WindowSize
     , ptable : PeriodicTable
+    , sigmaStare : String 
     }
 
 
@@ -26,6 +27,7 @@ decoder =
     Decode.succeed Flags
         |> Pipeline.required "windowSize" windowSize
         |> Pipeline.required "ptable" PeriodicTable.decoder
+        |> Pipeline.required "sigmaStare" Decode.string
 
 
 windowSize : Decoder WindowSize

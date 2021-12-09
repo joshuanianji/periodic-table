@@ -16,15 +16,17 @@ type alias SharedState =
     , device : Element.Device
     , key : Nav.Key
     , ptable : PeriodicTable
+    , sigmaStare : String -- URL location of sigma stare
     }
 
 
 init : Flags -> Nav.Key -> SharedState
-init { windowSize, ptable } key =
+init { windowSize, ptable, sigmaStare } key =
     { windowSize = windowSize
     , device = Element.classifyDevice windowSize
     , key = key
     , ptable = ptable
+    , sigmaStare = sigmaStare
     }
 
 
