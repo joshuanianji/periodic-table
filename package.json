@@ -4,8 +4,9 @@
   "description": "This repository holds my code for my Compsci IA, which is a periodic table web app. See it in action [here](https://joshuaji.com/projects/ptable)!",
   "main": "elm.js",
   "scripts": {
-    "build": "./scripts/optimize.sh src/Main.elm",
-    "start": "elm-live src/Main.elm --dir=./public --pushstate -- --output=public/elm.js"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "repository": {
     "type": "git",
@@ -19,7 +20,10 @@
   },
   "homepage": "https://github.com/joshuanianji/Compsci-IA#readme",
   "devDependencies": {
+    "elm-format": "^0.8.5",
     "elm-live": "^4.0.2",
-    "uglify-js": "^3.14.4"
+    "uglify-js": "^3.14.4",
+    "vite": "^2.7.1",
+    "vite-plugin-elm": "^2.5.1"
   }
 }
