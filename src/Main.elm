@@ -1,7 +1,7 @@
 module Main exposing (main)
 
 import Browser
-import Element exposing (Element)
+import Element
 import Router 
 import Html exposing (Html)
 import Json.Encode as Encode
@@ -172,6 +172,6 @@ updateRouterWith model sharedState ( nextRouterModel, routerCmd ) =
 
 
 subscriptions : Model -> Sub Msg
-subscriptions model =
+subscriptions _ =
     Browser.Events.onResize
         (\x y -> WindowResize (WindowSize x y))

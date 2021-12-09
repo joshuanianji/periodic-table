@@ -4,7 +4,7 @@ import Browser.Navigation as Nav
 import Element
 import Data.Flags exposing (Flags, WindowSize)
 import Routes exposing (Route)
-import Data.PeriodicTable as PeriodicTable exposing (PeriodicTable)
+import Data.PeriodicTable exposing (PeriodicTable)
 
 ---- DATA 
 type alias SharedState = 
@@ -16,11 +16,11 @@ type alias SharedState =
 
 
 init : Flags -> Nav.Key -> SharedState
-init { windowSize, atoms } key =
+init { windowSize, ptable } key =
     { windowSize = windowSize
     , device = Element.classifyDevice windowSize
     , key = key
-    , ptable = PeriodicTable.fromAtoms atoms
+    , ptable = ptable
     }
 
 ---- HELPERS

@@ -5,9 +5,8 @@ import Page.Home as Home
 import Page.Atom as Atom 
 import Page.NotFound as NotFound
 import SharedState exposing (SharedState)
-import Util 
 import Html exposing (Html)
-import Element exposing (Element)
+import Element 
 import Element.Background as Background
 import Colours
 

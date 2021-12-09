@@ -2,12 +2,12 @@ module Data.Flags exposing (Flags, WindowSize, decoder)
 
 import Json.Decode as Decode exposing (Decoder)
 import Json.Decode.Pipeline as Pipeline
-import Data.Atom as Atom exposing (Atom)
+import Data.PeriodicTable as PeriodicTable exposing (PeriodicTable)
 
 
 type alias Flags =
     { windowSize : WindowSize
-    , atoms : List Atom 
+    , ptable : PeriodicTable 
     }
 
 
@@ -26,7 +26,7 @@ decoder : Decoder Flags
 decoder =
     Decode.succeed Flags
         |> Pipeline.required "windowSize" windowSize
-        |> Pipeline.required "atoms" (Decode.list Atom.decoder)
+        |> Pipeline.required "ptable" PeriodicTable.decoder
 
 
 
