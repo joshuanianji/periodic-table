@@ -1,7 +1,7 @@
 module SharedState exposing (SharedState, init, navigateTo, updateScreenSize)
 
 import Browser.Navigation as Nav
-import Data.Flags exposing (Flags, WindowSize)
+import Data.Flags exposing (Flags, Media, WindowSize)
 import Data.PeriodicTable exposing (PeriodicTable)
 import Element
 import Routes exposing (Route)
@@ -16,17 +16,17 @@ type alias SharedState =
     , device : Element.Device
     , key : Nav.Key
     , ptable : PeriodicTable
-    , sigmaStare : String -- URL location of sigma stare
+    , media : Media
     }
 
 
 init : Flags -> Nav.Key -> SharedState
-init { windowSize, ptable, sigmaStare } key =
+init { windowSize, ptable, media } key =
     { windowSize = windowSize
     , device = Element.classifyDevice windowSize
     , key = key
     , ptable = ptable
-    , sigmaStare = sigmaStare
+    , media = media
     }
 
 
