@@ -183,6 +183,7 @@ view ss model =
     Element.column
         [ Element.spacing 30
         , Element.centerX
+        , Element.paddingXY 12 16
         ]
         [ periodicTable ss model 
         , compoundInput
