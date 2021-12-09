@@ -1,17 +1,39 @@
 module Data.Atom exposing
     ( Atom
     , MaybeAtom(..)
-    , PTableAtom(..)
     , PhaseChanges
-    , Placeholder
     , Section(..)
     , State(..)
-    , errorAtom
     , sectionToString
     , stateToString
+    , decoder
+    , isFBlock
+    , fromMaybe
     )
 
 -- state at room temperature
+
+import Json.Decode as Decode exposing (Decoder, Error(..))
+import Json.Decode.Pipeline exposing (hardcoded, required)
+import Round
+
+
+type alias Atom =
+    { name : String
+    , symbol : String
+    , state : State
+    , section : Section
+    , protons : Int
+    , xpos : Int
+    , ypos : Int
+    , weight : String -- So i can keep sig. digs. (for example if the weight is 16.000 elm will automatically write 16, but string will keep 16.000)
+    , electronShells : List Int
+    , wikiLink : String -- link to the wikipedia page lol
+    , summary : String -- a paragraph explaining  the element
+    , discoveredBy : String -- "not found" if it is a null value
+    , namedBy : String -- also "not found" if it is a null value
+    , phaseChanges : PhaseChanges -- which Kelvin temperatures the element changes phases in
+    }
 
 
 type State
@@ -107,47 +129,6 @@ type alias PhaseChanges =
 
 
 
--- Big boy data type for big boy atom
-
-
-type alias Atom =
-    { name : String
-    , symbol : String
-    , state : State
-    , section : Section
-    , protons : Int
-    , xpos : Int
-    , ypos : Int
-    , weight : String -- So i can keep sig. digs. (for example if the weight is 16.000 elm will automatically write 16, but string will keep 16.000)
-    , electronShells : List Int
-    , wikiLink : String -- link to the wikipedia page lol
-    , summary : String -- a paragraph explaining  the element
-    , discoveredBy : String -- "not found" if it is a null value
-    , namedBy : String -- also "not found" if it is a null value
-    , phaseChanges : PhaseChanges -- which Kelvin temperatures the element changes phases in
-    }
-
-
-
--- this is for the Periodic Table for the Lanthanide placeholders (they do nothing when clicked)
-
-
-type alias Placeholder =
-    { name : String
-    , section : Section
-    , xpos : Int
-    }
-
-
-
--- when making the periodic table, I have to have a choice : Either an atom or a placeholder, since they are used differently.
-
-
-type PTableAtom
-    = PTableAtom Atom
-    | PTablePlaceholder Placeholder
-
-
 
 {-
    in instances such as the Molar Mass calculator, the user may not input a correct atom symbol. Then we have an error.
@@ -165,26 +146,142 @@ type MaybeAtom
     | Fail String -- the string is the Atom Symbol and it helps for debugging
 
 
+---- DECODERS
 
--- the atom to show when an error happens
+
+decoder : Decoder Atom
+decoder =
+    phaseChangeDecoder
+        |> Decode.andThen
+            (\phaseChanges ->
+                Decode.succeed Atom
+                    |> required "name" Decode.string
+                    |> required "symbol" Decode.string
+                    -- `null` decodes to `Nothing`
+                    |> required "phase" stateDecoder
+                    |> required "category" sectionDecoder
+                    |> required "number" Decode.int
+                    |> required "xpos" Decode.int
+                    |> required "ypos" Decode.int
+                    |> required "atomic_mass" weightDecoder
+                    |> required "shells" (Decode.list Decode.int)
+                    |> required "source" Decode.string
+                    |> required "summary" Decode.string
+                    |> required "discovered_by" badName
+                    |> required "named_by" badName
+                    |> hardcoded phaseChanges
+            )
 
 
-errorAtom : Atom
-errorAtom =
-    Atom
-        "Error"
-        "Err"
-        Gas
-        TransitionMetal
-        1
-        1
-        1
-        "69.6969"
-        [ 6, 9 ]
-        "https://en.wikipedia.org/wiki/PewDiePie_vs_T-Series"
-        "ree"
-        "Joshua Ji"
-        "Penis Parker"
-        { melt = Just 2000
-        , boil = Just 4000
-        }
+phaseChangeDecoder : Decoder PhaseChanges
+phaseChangeDecoder =
+    Decode.succeed PhaseChanges
+        -- Decode.nullable makes it a Maybe type - Nothing if it is a null
+        |> required "melt" (Decode.nullable Decode.float)
+        |> required "boil" (Decode.nullable Decode.float)
+
+stateDecoder : Decoder State
+stateDecoder =
+    Decode.string
+        |> Decode.andThen
+            (\str ->
+                case str of
+                    "Gas" ->
+                        Decode.succeed Gas
+
+                    "Solid" ->
+                        Decode.succeed Solid
+
+                    "Liquid" ->
+                        Decode.succeed Liquid
+
+                    _ ->
+                        Decode.succeed UnknownState
+            )
+
+
+sectionDecoder : Decoder Section
+sectionDecoder =
+    Decode.string
+        |> Decode.andThen
+            (\str ->
+                case str of
+                    "hydrogen" ->
+                        Decode.succeed Hydrogen
+
+                    "alkali metal" ->
+                        Decode.succeed Alkali
+
+                    "alkaline earth metal" ->
+                        Decode.succeed AlkalineEarth
+
+                    "transition metal" ->
+                        Decode.succeed TransitionMetal
+
+                    "metalloid" ->
+                        Decode.succeed Metalloid
+
+                    "post-transition metal" ->
+                        Decode.succeed PostTransitionMetal
+
+                    "diatomic nonmetal" ->
+                        Decode.succeed NonMetal
+
+                    "polyatomic nonmetal" ->
+                        Decode.succeed NonMetal
+
+                    "halogen" ->
+                        Decode.succeed Halogen
+
+                    "noble gas" ->
+                        Decode.succeed NobleGas
+
+                    "lanthanide" ->
+                        Decode.succeed Lanthanide
+
+                    "actinide" ->
+                        Decode.succeed Actinide
+
+                    _ ->
+                        Decode.succeed UnknownSection
+            )
+
+
+weightDecoder : Decoder String
+weightDecoder =
+    let
+        -- rounding the weight to 3 decimal places. Converts it into a string!!
+        roundFloat float =
+            Round.round 3 float
+    in
+    Decode.float
+        |> Decode.andThen
+            (\inputWeight ->
+                inputWeight
+                    |> roundFloat
+                    |> Decode.succeed
+            )
+
+
+badName : Decoder String
+badName =
+    Decode.oneOf
+        [ Decode.string
+        , Decode.null "Not found"
+        ]
+
+
+---- HELPERS
+
+isFBlock : Atom -> Bool
+isFBlock atom = atom.section == Lanthanide || atom.section == Actinide
+
+
+fromMaybe : Maybe Atom -> MaybeAtom 
+fromMaybe maybeAtom =
+    case maybeAtom of
+        Nothing ->
+            Fail "Atom not found"
+
+        Just atom ->
+            Success atom

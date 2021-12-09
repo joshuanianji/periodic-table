@@ -4,18 +4,18 @@
 module Data.Molecule exposing (MaybeMolecule(..), Molecule(..), fromString, molarMass, toAtomList, view, viewMaybe)
 
 import Data.Atom as Atom exposing (Atom, MaybeAtom)
-import DataBase.DataParser exposing (retrieveAtom)
 import Element exposing (Element)
 import Html
 import Maybe.Extra
 import Parser exposing ((|.), (|=), DeadEnd, Parser, Step)
 import Set
+import Data.PeriodicTable as PeriodicTable exposing (PeriodicTable)
 
 
 
 {-
 
-   this molecule type alias is a union type to deal with nested compounds.
+   this molecule data type is a union type to deal with nested compounds.
 
    A molecule such as S8 would be:
    Mono Sulfur 8
@@ -206,12 +206,13 @@ viewMaybe molecule =
 
 
 -- converts our string to a Maybe molecule!
+-- Requires the periodic table to lookup the atoms
 
 
-fromString : String -> MaybeMolecule
-fromString string =
+fromString : PeriodicTable -> String -> MaybeMolecule
+fromString ptable string =
     Parser.run moleculeParser string
-        |> removeResult
+        |> removeResult ptable
 
 
 
@@ -348,11 +349,11 @@ allErrorsToString deadends =
         |> (++) "error: "
 
 
-removeResult : Result (List DeadEnd) (List AtomParserData) -> MaybeMolecule
-removeResult test =
+removeResult : PeriodicTable -> Result (List DeadEnd) (List AtomParserData) -> MaybeMolecule
+removeResult ptable test =
     case test of
         Ok result ->
-            parserDataToCompound result 1
+            parserDataToCompound ptable result 1
 
         Err error ->
             BadMolecule error
@@ -365,12 +366,12 @@ removeResult test =
 -}
 
 
-parserDataToCompound : List AtomParserData -> Int -> MaybeMolecule
-parserDataToCompound atomParserData amount =
+parserDataToCompound : PeriodicTable -> List AtomParserData -> Int -> MaybeMolecule
+parserDataToCompound ptable atomParserData amount =
     let
         compoundList =
             List.map
-                parserDatumToCompound
+                (parserDatumToCompound ptable) 
                 atomParserData
                 |> Maybe.Extra.combine
     in
@@ -393,15 +394,15 @@ parserDataToCompound atomParserData amount =
 -- turns one (1) AtomParserData to a Maybe Conpound
 
 
-parserDatumToCompound : AtomParserData -> Maybe Molecule
-parserDatumToCompound data =
+parserDatumToCompound : PeriodicTable -> AtomParserData -> Maybe Molecule
+parserDatumToCompound ptable data =
     case data of
         SingleAtom symbol amount ->
             Just <|
-                Mono (retrieveAtom symbol) amount
+                Mono (Atom.fromMaybe <| PeriodicTable.findAtom symbol ptable) amount
 
         PolyAtom atoms amount ->
-            case parserDataToCompound atoms amount of
+            case parserDataToCompound ptable atoms amount of
                 GoodMolecule molecule ->
                     Just molecule
 
@@ -578,8 +579,8 @@ checkAtomName atomParserData =
 -- HELPERS
 
 
-toAtomList : MaybeMolecule -> List Atom
-toAtomList maybeMolecule =
+toAtomList : PeriodicTable -> MaybeMolecule -> List Atom
+toAtomList ptable maybeMolecule =
     case maybeMolecule of
         GoodMolecule molecule ->
             let
@@ -593,7 +594,10 @@ toAtomList maybeMolecule =
                             List.concatMap moleculeDecomposter listMaybeAtom
 
                         Hydrate _ ->
-                            [ retrieveAtom "H", retrieveAtom "O" ]
+                            [ PeriodicTable.findAtom "H" ptable
+                            , PeriodicTable.findAtom "O" ptable 
+                            ]
+                            |> List.map Atom.fromMaybe
             in
             List.filterMap
                 (\maybeAtom ->
