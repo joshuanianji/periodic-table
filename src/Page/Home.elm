@@ -261,7 +261,7 @@ viewPTableElem model pTableElem =
                     , Border.widthEach borderWidths
                     , Border.color (Colours.sectionColour atom.section)
                     , Element.pointer
-                    , Events.onClick (NavigateTo <| Routes.Atom atom.name)
+                    , Events.onClick (NavigateTo <| Routes.Atom atom.symbol)
                     , Element.spacing 2
                     ]
                         |> (::)

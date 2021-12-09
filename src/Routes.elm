@@ -12,10 +12,10 @@ import Url.Parser as Url exposing ((</>), Parser)
 
 type Route
     = Home
-    | Atom AtomName
+    | Atom AtomSymbol
 
 
-type alias AtomName =
+type alias AtomSymbol =
     String
 
 
@@ -23,7 +23,7 @@ urlParser : Parser (Route -> a) a
 urlParser =
     Url.oneOf
         [ Url.map Home Url.top -- "/"
-        , Url.map Atom Url.string -- "/<atom name>"
+        , Url.map Atom Url.string -- "/<atom symbol>"
         ]
 
 
@@ -50,8 +50,8 @@ tabTitle route =
                 Just Home ->
                     ""
 
-                Just (Atom name) ->
-                    name ++ " - "
+                Just (Atom symbol) ->
+                    symbol ++ " - "
 
                 Nothing ->
                     "Not Found - "
@@ -71,7 +71,7 @@ toUrlString route =
                 Home ->
                     []
 
-                Atom name ->
-                    [ name ]
+                Atom symbol ->
+                    [ symbol ]
     in
     "#/" ++ String.join "/" urlPieces
