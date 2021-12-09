@@ -1,22 +1,19 @@
 module Main exposing (main)
 
-import Browser
+import Browser exposing (UrlRequest(..))
+import Browser.Events
+import Browser.Navigation as Nav
+import Colours
+import Data.Flags as Flags exposing (WindowSize)
 import Element
-import Router 
+import Element.Font as Font
 import Html exposing (Html)
+import Json.Decode
 import Json.Encode as Encode
+import Router
 import Routes exposing (Route)
 import SharedState exposing (SharedState)
-import Router
-import Json.Decode
-import Browser.Navigation as Nav
 import Url exposing (Url)
-import Element.Font as Font 
-import Colours
-import Browser.Events
-import Data.Flags as Flags 
-import Data.Flags exposing (WindowSize)
-import Browser exposing (UrlRequest(..))
 
 
 
@@ -35,6 +32,7 @@ main =
         }
 
 
+
 ---- MODEL -----
 
 
@@ -44,9 +42,9 @@ type alias Model =
     , route : Maybe Route
     }
 
-type alias AppState
-    = Result (Json.Decode.Error) (SharedState, Router.Model)
 
+type alias AppState =
+    Result Json.Decode.Error ( SharedState, Router.Model )
 
 
 init : Encode.Value -> Url -> Nav.Key -> ( Model, Cmd Msg )
@@ -54,18 +52,21 @@ init flagsValue url navKey =
     let
         decodedFlags =
             Json.Decode.decodeValue Flags.decoder flagsValue
-        mRoute = Routes.fromUrl url
+
+        mRoute =
+            Routes.fromUrl url
     in
     case decodedFlags of
         Ok flags ->
-            let 
-                sharedState = SharedState.init flags navKey
+            let
+                sharedState =
+                    SharedState.init flags navKey
             in
-            ( { appState = Ok (sharedState, (Router.init sharedState mRoute))
+            ( { appState = Ok ( sharedState, Router.init sharedState mRoute )
               , navKey = navKey
               , route = mRoute
               }
-            , Cmd.none 
+            , Cmd.none
             )
 
         Err err ->
@@ -80,6 +81,7 @@ init flagsValue url navKey =
 
 ---- VIEW ----
 
+
 viewApplication : Model -> Browser.Document Msg
 viewApplication model =
     { title = Routes.tabTitle model.route
@@ -91,17 +93,17 @@ viewApplication model =
 view : Model -> Html Msg
 view model =
     case model.appState of
-        Ok (sharedState, routerModel) ->
-            Router.view sharedState routerModel 
+        Ok ( sharedState, routerModel ) ->
+            Router.view sharedState routerModel
                 |> Html.map RouterMsg
 
         Err err ->
-            viewError err 
+            viewError err
 
 
-viewError : Json.Decode.Error -> Html Msg 
+viewError : Json.Decode.Error -> Html Msg
 viewError err =
-    Element.el 
+    Element.el
         [ Font.color Colours.gaseousState ]
         (Element.text <| Json.Decode.errorToString err)
         |> Element.layout []
@@ -115,17 +117,17 @@ type Msg
     = ChangedUrl Url
     | ClickedLink UrlRequest
     | WindowResize WindowSize
-    | RouterMsg Router.Msg 
+    | RouterMsg Router.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case (model.appState, msg) of
-        (Ok (sharedState, subModel), ChangedUrl url) ->
+    case ( model.appState, msg ) of
+        ( Ok ( sharedState, subModel ), ChangedUrl url ) ->
             let
                 newRoute =
                     Routes.fromUrl url
-            in 
+            in
             Router.update sharedState (Router.updateRoute newRoute) subModel
                 |> updateRouterWith { model | route = newRoute } sharedState
 
@@ -137,35 +139,38 @@ update msg model =
                 External url ->
                     ( model, Nav.load url )
 
-        (_, WindowResize windowSize) ->
+        ( _, WindowResize windowSize ) ->
             case model.appState of
-                Ok (sharedState, routerModel) ->
+                Ok ( sharedState, routerModel ) ->
                     let
-                        newAppState = Ok (SharedState.updateScreenSize windowSize sharedState, routerModel)
+                        newAppState =
+                            Ok ( SharedState.updateScreenSize windowSize sharedState, routerModel )
                     in
-                    ({ model | appState = newAppState }, Cmd.none)
-                    
-                Err _ -> 
-                    (model, Cmd.none)
-        
-        (Ok (sharedState, routerModel), RouterMsg subMsg) ->
+                    ( { model | appState = newAppState }, Cmd.none )
+
+                Err _ ->
+                    ( model, Cmd.none )
+
+        ( Ok ( sharedState, routerModel ), RouterMsg subMsg ) ->
             let
-                (newRouterModel, routerCmd) = Router.update sharedState subMsg routerModel
-                newAppState = Ok (sharedState, newRouterModel)
+                ( newRouterModel, routerCmd ) =
+                    Router.update sharedState subMsg routerModel
+
+                newAppState =
+                    Ok ( sharedState, newRouterModel )
             in
-            ({ model | appState = newAppState }, Cmd.map RouterMsg routerCmd)
+            ( { model | appState = newAppState }, Cmd.map RouterMsg routerCmd )
 
         ( _, _ ) ->
-            (model, Cmd.none)
-
-
+            ( model, Cmd.none )
 
 
 updateRouterWith : Model -> SharedState -> ( Router.Model, Cmd Router.Msg ) -> ( Model, Cmd Msg )
 updateRouterWith model sharedState ( nextRouterModel, routerCmd ) =
-    ( { model | appState = Ok (sharedState, nextRouterModel) }
+    ( { model | appState = Ok ( sharedState, nextRouterModel ) }
     , Cmd.map RouterMsg routerCmd
     )
+
 
 
 -- | SUBSCRIPTIONS

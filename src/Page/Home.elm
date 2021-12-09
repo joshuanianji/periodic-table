@@ -1,5 +1,5 @@
-module Page.Home exposing 
-    (Model
+module Page.Home exposing
+    ( Model
     , Msg
     , init
     , subscriptions
@@ -7,50 +7,54 @@ module Page.Home exposing
     , view
     )
 
-
-import Data.Molecule as Molecule exposing (MaybeMolecule)
+import Colours
 import Data.Atom as Atom exposing (Atom)
+import Data.Molecule as Molecule exposing (MaybeMolecule)
+import Data.PeriodicTable as PeriodicTable
 import Element exposing (Element)
 import Element.Background as Background
-import Element.Font as Font 
-import Element.Input as Input 
-import Colours
-import Routes exposing (Route)
 import Element.Border as Border
-import Round
-import SharedState exposing (SharedState)
-import Data.PeriodicTable as PeriodicTable
 import Element.Events as Events
+import Element.Font as Font
+import Element.Input as Input
+import Round
+import Routes exposing (Route)
 import SharedState exposing (SharedState)
 
+
+
 ---- MODEL
-type alias Model = 
+
+
+type alias Model =
     { inputMoleculeString : String
     , inputMolecule : MaybeMolecule
     , selectedAtoms : List Atom
     }
 
+
 init : SharedState -> Model
-init sharedState = 
+init sharedState =
     let
-        moleculeStr = "CuSO4 5H2O"
+        moleculeStr =
+            "CuSO4 5H2O"
     in
-    
     { inputMoleculeString = moleculeStr
     , inputMolecule = Molecule.fromString sharedState.ptable moleculeStr
     , selectedAtoms = []
     }
 
 
----- VIEW 
 
+---- VIEW
 -- Add legend???
-{-|
-legend : Model -> Element Msg
+
+
+{-| legend : Model -> Element Msg
 legend model =
-    let
-        legendPadding =
-            Element.paddingEach { top = 0, right = 0, left = 400, bottom = 0 }
+let
+legendPadding =
+Element.paddingEach { top = 0, right = 0, left = 400, bottom = 0 }
 
         viewLegendItem color label =
             Element.row
@@ -109,8 +113,8 @@ legend model =
         [ sectionLegend
         , stateLegend
         ]
--}
 
+-}
 view : SharedState -> Model -> Element Msg
 view ss model =
     let
@@ -185,27 +189,27 @@ view ss model =
         , Element.centerX
         , Element.paddingXY 12 16
         ]
-        [ periodicTable ss model 
+        [ periodicTable ss model
         , compoundInput
         , displayedCompound
-        , displayedMolarMass 
+        , displayedMolarMass
         ]
-
 
 
 periodicTable : SharedState -> Model -> Element Msg
 periodicTable ss model =
     let
         -- display a single column of the periodic table
-        viewGroup ptableElems group  =
+        viewGroup ptableElems group =
             PeriodicTable.getCol group ptableElems
                 |> (List.map <| viewPTableElem model)
                 |> Element.column
                     [ Element.alignBottom
                     , Element.spacing 10
                     ]
-        
-        (upper, lower) = PeriodicTable.splitUpperLower ss.ptable
+
+        ( upper, lower ) =
+            PeriodicTable.splitUpperLower ss.ptable
 
         -- Upper Periodic Table is the periodic table for all the elements which aren't f block
         viewUpper =
@@ -235,7 +239,6 @@ periodicTable ss model =
         [ viewUpper
         , viewLower
         ]
-
 
 
 viewPTableElem : Model -> PeriodicTable.PTableElem -> Element Msg
@@ -327,9 +330,8 @@ viewPTableElem model pTableElem =
 ---- UPDATE
 
 
-
 type Msg
-    = NavigateTo Route 
+    = NavigateTo Route
     | UpdateMoleculeParser String
 
 
@@ -337,7 +339,7 @@ update : SharedState -> Msg -> Model -> ( Model, Cmd Msg )
 update sharedState msg model =
     case msg of
         NavigateTo route ->
-            ( model, SharedState.navigateTo route sharedState)
+            ( model, SharedState.navigateTo route sharedState )
 
         UpdateMoleculeParser text ->
             ( { model
@@ -350,7 +352,8 @@ update sharedState msg model =
 
 
 
----- SUBSCRIPTIONS 
+---- SUBSCRIPTIONS
+
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
