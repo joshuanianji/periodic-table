@@ -7,5 +7,6 @@ export default defineConfig({
         // https://vitejs.dev/config/#json-stringify
         // this is faster, pus we do not need to destructure the JSON anyway
         stringify: true
-    }
+    },
+    base: '/periodic-table/'
 })
