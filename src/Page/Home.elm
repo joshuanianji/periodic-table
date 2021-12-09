@@ -9,7 +9,7 @@ module Page.Home exposing
 
 import Colours
 import Data.Atom as Atom exposing (Atom)
-import Data.Molecule as Molecule exposing (ParsedMolecule, Molecule)
+import Data.Molecule as Molecule exposing (Molecule, ParsedMolecule)
 import Data.PeriodicTable as PeriodicTable
 import Element exposing (Element)
 import Element.Background as Background
@@ -17,11 +17,11 @@ import Element.Border as Border
 import Element.Events as Events
 import Element.Font as Font
 import Element.Input as Input
+import Html
+import Parser exposing (DeadEnd)
 import Round
 import Routes exposing (Route)
 import SharedState exposing (SharedState)
-import Parser exposing (DeadEnd)
-import Html
 
 
 
@@ -128,7 +128,10 @@ view ss model =
         , molarMassCalc ss model
         ]
 
+
+
 -- view periodic table stuff
+
 
 periodicTable : SharedState -> Model -> Element Msg
 periodicTable ss model =
@@ -260,10 +263,12 @@ viewPTableElem model pTableElem =
                     ]
 
 
+
 -- Molar Mass stuff
 
+
 molarMassCalc : SharedState -> Model -> Element Msg
-molarMassCalc ss model = 
+molarMassCalc ss model =
     let
         -- stringify molar mass
         stringifyMolarMass maybeMass =
@@ -283,8 +288,8 @@ molarMassCalc ss model =
                     Nothing
 
         displayedMolarMass =
-            Maybe.map 
-                (\txt -> 
+            Maybe.map
+                (\txt ->
                     Element.el
                         [ Element.centerX
                         , Font.color Colours.fontColour
@@ -335,9 +340,9 @@ molarMassCalc ss model =
                         )
                 }
     in
-    Element.column 
+    Element.column
         [ Element.width Element.fill
-        , Element.spacing 4 
+        , Element.spacing 4
         ]
         [ compoundInput
         , displayedCompound
@@ -349,15 +354,15 @@ viewParsedMolecule : SharedState -> ParsedMolecule -> Element Msg
 viewParsedMolecule ss parsedMolecule =
     case parsedMolecule of
         Molecule.Good molecule ->
-            viewMolecule molecule 
-        
+            viewMolecule molecule
+
         Molecule.LeFunny ->
             Element.image
                 []
                 { src = ss.media.sigmaStare
                 , description = "This is not a molecule. This is a bad attempt at a funny joke."
                 }
-        
+
         Molecule.Remilk ->
             Element.image
                 []
@@ -450,6 +455,7 @@ viewMolecule molecule =
     Element.html <| viewHtml molecule
 
 
+
 -- my own thing that converts all the errors / deadends the parser accumulates into a string, using the Elm DeadEnd type (https://package.elm-lang.org/packages/elm/parser/latest/Parser#DeadEnd) I use filterMap because I only want my own errors I wrote out - not the others. Those are represented in the Problem thing.
 
 
@@ -492,6 +498,8 @@ stringifyDeadends deadends =
         deadends
         |> String.join ","
         |> (++) "error: "
+
+
 
 ---- UPDATE
 

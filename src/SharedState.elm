@@ -1,7 +1,7 @@
 module SharedState exposing (SharedState, init, navigateTo, updateScreenSize)
 
 import Browser.Navigation as Nav
-import Data.Flags exposing (Flags, WindowSize, Media)
+import Data.Flags exposing (Flags, Media, WindowSize)
 import Data.PeriodicTable exposing (PeriodicTable)
 import Element
 import Routes exposing (Route)

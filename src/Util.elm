@@ -1,5 +1,6 @@
 module Util exposing (find, mapFirst)
 
+
 find : (a -> Bool) -> List a -> Maybe a
 find f =
     List.foldl

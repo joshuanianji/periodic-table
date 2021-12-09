@@ -1,4 +1,4 @@
-module Data.Flags exposing (Flags, WindowSize, Media, decoder)
+module Data.Flags exposing (Flags, Media, WindowSize, decoder)
 
 import Data.PeriodicTable as PeriodicTable exposing (PeriodicTable)
 import Json.Decode as Decode exposing (Decoder)
@@ -8,7 +8,7 @@ import Json.Decode.Pipeline as Pipeline
 type alias Flags =
     { windowSize : WindowSize
     , ptable : PeriodicTable
-    , media : Media 
+    , media : Media
     }
 
 
@@ -17,10 +17,12 @@ type alias WindowSize =
     , width : Int
     }
 
+
 type alias Media =
     { sigmaStare : String
     , remilkLook : String
     }
+
 
 
 -- DECODER
@@ -39,6 +41,7 @@ windowSize =
     Decode.succeed WindowSize
         |> Pipeline.required "height" Decode.int
         |> Pipeline.required "width" Decode.int
+
 
 media : Decoder Media
 media =

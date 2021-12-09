@@ -1,7 +1,7 @@
 -- this module is just to define what a molecule is.
 
 
-module Data.Molecule exposing (ParsedMolecule(..), Molecule(..), fromString, molarMass, toAtomList)
+module Data.Molecule exposing (Molecule(..), ParsedMolecule(..), fromString, molarMass, toAtomList)
 
 import Data.Atom as Atom exposing (Atom, MaybeAtom)
 import Data.PeriodicTable as PeriodicTable exposing (PeriodicTable)
@@ -114,8 +114,6 @@ molarMass molecule =
 
 
 -- PARSER
-
-
 -- converts our string to a Maybe molecule!
 -- Requires the periodic table to lookup the atoms
 
@@ -124,7 +122,6 @@ fromString : PeriodicTable -> String -> ParsedMolecule
 fromString ptable string =
     Parser.run moleculeWithMemeParser string
         |> toMolecule ptable
-
 
 
 type MoleculeWithMemes
@@ -141,18 +138,24 @@ moleculeWithMemeParser =
         , Parser.map (always RemilkMaguire) parseRemilk
         ]
 
+
+
 -- reserved when the user is a top notch comedian
+
+
 parseFunny : Parser ()
 parseFunny =
-    ["poop", "penis", "amongus", "amogus", "sus", "sussy"]
-        |> List.map Util.Parser.iToken 
-        |> Parser.oneOf 
+    [ "poop", "penis", "amongus", "amogus", "sus", "sussy" ]
+        |> List.map Util.Parser.iToken
+        |> Parser.oneOf
+
 
 parseRemilk : Parser ()
-parseRemilk = 
-    ["remilk"]
+parseRemilk =
+    [ "remilk" ]
         |> List.map Util.Parser.iToken
-        |> Parser.oneOf 
+        |> Parser.oneOf
+
 
 
 -- when I'm debugging and want every single error
@@ -232,11 +235,11 @@ toMolecule : PeriodicTable -> Result (List DeadEnd) MoleculeWithMemes -> ParsedM
 toMolecule ptable test =
     case test of
         Ok LeFunnyThing ->
-            LeFunny 
-        
+            LeFunny
+
         Ok RemilkMaguire ->
             Remilk
-        
+
         Ok (ActualMolecule parsedAtomData) ->
             parserDataToCompound ptable parsedAtomData 1
 
@@ -490,9 +493,9 @@ toAtomList ptable parsedMolecule =
                 )
                 (moleculeDecomposter molecule)
 
-        LeFunny -> 
+        LeFunny ->
             []
-        
+
         Remilk ->
             []
 
