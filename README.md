@@ -1,6 +1,10 @@
 # Joshua's Compsci IA
 
-This repository holds my code for my Compsci IA, which is a periodic table web app. See it in action [here](https://joshuaji.com/projects/ptable)!
+This repository holds my code for my high school Compsci IA, which is a periodic table web app. See it in action [here](https://joshuaji.com/projects/ptable)!
+
+## Note
+
+This project has gone some pretty dramatic changes. To see the state of the code at (approximately) the time of the IA submission, it would likely to have been [this commit](https://github.com/joshuanianji/periodic-table/tree/1d0cbc86ff70dd0ca35c9ab620f10f5a3f30c1ad).
 
 ## Quick Info
 
