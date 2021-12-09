@@ -228,7 +228,7 @@ periodicTable ss model =
     Element.column
         [ Element.centerX
         , Element.width Element.fill
-        , Element.spacing 10
+        , Element.spacing 16
         , Background.color (Element.rgba 0 0 0 0)
         ]
         [ viewUpper
